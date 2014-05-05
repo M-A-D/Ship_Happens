@@ -1,7 +1,7 @@
 #ifndef SUBMARINE_H
 #define SUBMARINE_H
 
-class Submarine : public Ship
+class Submarine : public ship
 {
 public:
     Submarine();
