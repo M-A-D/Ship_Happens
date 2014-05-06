@@ -32,6 +32,7 @@ Player::Player() {
     Player::name = "Spieler_1";
     Player::lost = false;
     Player::ready = false;
+
 }
 
 /*
@@ -84,11 +85,28 @@ void Player::bomb_enemy_field(Board& _en_field, size_t _x, size_t _y) {
  * two x and y coordinates and a the lenght right now it is used with a fix lenght
  * param, later the lenght flag should be set by the ship used by the player
  */
-void Player::set_ship(size_t _len, size_t _x1, size_t _y1, size_t _x2, size_t y2) {
+void Player::set_ship(size_t _len, size_t _x1, size_t _y1, size_t _x2, size_t _y2) {
     //[1] func. needs to be done
 }
 
+/*
+ *
+ */
 Board& Player::return_board_ref() {
     Board& _field = Player::own_field;
     return _field;
+}
+
+/*
+ *
+ */
+void Player::show_field() {
+    Player::own_field.draw_board();
+}
+
+/*
+ *
+ */
+void Player::show_enemy_field(Board &_en_field) {
+    _en_field.show_board();
 }

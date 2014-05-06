@@ -1,10 +1,32 @@
-#ifndef DESTROYER_H
-#define DESTROYER_H
+/************************************************************************************
+ * destroyer.h																		*
+ * Contains the definition of the sub class destroyer, which is a kind of ship		*
+ * Matthias Pfitzmayer		140404		madmayer@gmx.net							*
+ ************************************************************************************/
 
-class Destroyer : public Ship
-{
+ /***********************************************************************************
+  * Changelog:
+  * 140501  MP  @all    Definition of the ship subclass Destroyer
+  *
+  *
+  ***********************************************************************************/
+
+# ifndef DESTROYER_H
+# define DESTROYER_H
+
+# include "my_headers.h"
+# include "ship.h"
+
+class Destroyer : public virtual Ship {
+private:
+    bool alive;
+    bool set;
+    static size_t const lenght = 3;
+    Square* position[lenght];
+
 public:
     Destroyer();
+    ~Destroyer();
 };
 
 #endif // DESTROYER_H
