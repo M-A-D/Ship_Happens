@@ -17,25 +17,33 @@
  # include "my_headers.h"
  # include "square.h"
 
+/**
+  * @brief The Ship class
+  *
+  */
  class Ship {
  private:
-     bool alive;
-     bool set;
-     static size_t const lenght = 2;
-     Square *position[lenght];
+     bool alive;                        /**< */
+     bool set;                          /**< */
+     static size_t const type = 0;      /**< */
+     static size_t const lenght = 2;    /**< */
+     Square *position[lenght];          /**< */
 
  public:
      Ship();
      ~Ship();
-     /*
-      * a member function for every Ship_lenght
-      */
+     void reset_ship();
+
+     // a member function for every Ship_lenght
+
+     void set_ship(size_t _position, Square* _spn);
      void set_ship(Square* _sq1, Square* _sq2);
      void set_ship(Square* _sq1, Square* _sq2, Square* _sq3);
      void set_ship(Square* _sq1, Square* _sq2, Square* _sq3, Square* _sq4);
      void set_ship(Square* _sq1, Square* _sq2, Square* _sq3, Square* _sq4, Square* _sq5);
      void check_ship_stat();
      void display_ship();
+
 
      size_t get_lenght();
  };

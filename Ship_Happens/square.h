@@ -1,6 +1,6 @@
 /************************************************************************************
  * square.h 																		*
- * Contains the definition of the class square 										*
+ * Contains the definition of the square class 										*
  * Matthias Pfitzmayer		140404		madmayer@gmx.net							*
  ************************************************************************************/
 
@@ -16,11 +16,16 @@
 
 # include "my_headers.h"
 
+/**
+ * @brief The Square class
+ * a single pice of a board, it mainly consists of flags, that indicate it's current
+ * status e.g. set, hit or disabled
+ */
 class Square{
 private:
-    bool set;
-    bool hit;
-    bool disabled;
+    bool set;       /**< the set flag. this flag indicates if something is set on this square*/
+    bool hit;       /**< the hit flag. this flag signals the system if a square has already been bombed*/
+    bool disabled;  /**< the disabled flag. this flag shows if interaktion with this square is possible or not*/
 
 public:
     Square ();											// std constructor
@@ -28,7 +33,7 @@ public:
     ~Square ();											// destructor
 
     // setting ships
-    void set_square ();
+    bool set_square ();
     void un_set_square ();
     bool get_square_set ();
 

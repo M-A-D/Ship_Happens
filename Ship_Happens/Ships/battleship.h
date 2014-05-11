@@ -7,7 +7,7 @@
  /***********************************************************************************
   * Changelog:
   * 140501  MP  @all    Definition of the ship sub class battleship
-  *
+  * 140510  MP  @all    added comments
   *
   ***********************************************************************************/
 
@@ -15,18 +15,25 @@
 # define BATTLESHIP_H
 
 # include "my_headers.h"
-# include "square.h"
 # include "ship.h"
 
+/**
+ * @brief The Battleship class
+ *
+ */
 class Battleship : public virtual Ship {
-    bool alive;
-    bool set;
-    static size_t const lenght = 4;
-    Square* position[lenght];
+private:
+    bool alive;                     /**< */
+    bool set;                       /**< */
+    static size_t const type = 3;   /**< */
+    static size_t const lenght = 4; /**< */
+    Square* position[lenght];       /**< */
 
 public:
     Battleship();
     ~Battleship();
+
+    size_t get_lenght();
 };
 
 #endif // BATTLESHIP_H

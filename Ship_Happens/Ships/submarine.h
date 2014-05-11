@@ -17,15 +17,22 @@
 # include "my_headers.h"
 # include "ship.h"
 
+/**
+ * @brief The Submarine class
+ *
+ */
 class Submarine : public virtual Ship {
 private:
     bool alive;
     bool set;
+    static size_t const type = 1;
     static size_t const lenght = 2;
     Square *position[lenght];
 public:
     Submarine();
     ~Submarine();
+
+    size_t get_lenght();
 
 };
 

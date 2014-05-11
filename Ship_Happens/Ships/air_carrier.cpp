@@ -16,17 +16,29 @@
 
 # include "air_carrier.h"
 
-/*
+/**
+ * @brief AirCarrier::AirCarrier
  * std constructor
+ * @param bool AirCarrier::alive = true
+ * @param bool AirCarrier::set = false
  */
 AirCarrier::AirCarrier() {
-    AirCarrier::alive = ture;
+    AirCarrier::alive = true;
     AirCarrier::set = false;
 }
 
-/*
+/**
+ * @brief AirCarrier::~AirCarrier()
  * destructor
  */
 AirCarrier::~AirCarrier() {
 
+}
+
+/**
+ * @brief AirCarrier::get_lenght
+ * @return size_t AirCarrier::lenght
+ */
+size_t AirCarrier::get_lenght() {
+    return AirCarrier::lenght;
 }

@@ -7,7 +7,7 @@
  /***********************************************************************************
   * Changelog:
   * 140501  MP  @all    Definition of the ship subclass Destroyer
-  *
+  * 140510  MP  @all    added comments
   *
   ***********************************************************************************/
 
@@ -19,14 +19,17 @@
 
 class Destroyer : public virtual Ship {
 private:
-    bool alive;
-    bool set;
-    static size_t const lenght = 3;
-    Square* position[lenght];
+    bool alive;                     /**< */
+    bool set;                       /**< */
+    static size_t const type = 2;   /**< */
+    static size_t const lenght = 3; /**< */
+    Square* position[lenght];       /**< */
 
 public:
     Destroyer();
     ~Destroyer();
+
+    size_t get_lenght();
 };
 
 #endif // DESTROYER_H

@@ -15,19 +15,25 @@
 # define AIRCARRIER_H
 
 # include "my_headers.h"
-# include "square.h"
 # include "ship.h"
 
+/**
+ * @brief The AirCarrier class
+ *
+ */
 class AirCarrier : public virtual Ship {
 private:
-    bool alive;
-    bool set;
-    static size_t const lenght = 5;
-    Square* position[lenght];
+    bool alive;                     /**< */
+    bool set;                       /**< */
+    static size_t const type = 3;   /**< */
+    static size_t const lenght = 5; /**< */
+    Square* position[lenght];       /**< */
 
 public:
     AirCarrier();
     ~AirCarrier();
+
+    size_t get_lenght();
 };
 
 # endif // AIRCARRIER_H
