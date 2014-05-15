@@ -31,30 +31,15 @@ private:
     bool lost;          /**< Bool lost. */
     bool ready;         /**< Bool ready. indicates if a player is ready with his turn*/
     Board own_field;    /**< Board. */
-    static size_t const num_subm = 4;
-    static size_t const num_dest = 3;
-    static size_t const num_bash = 2;
-    static size_t const num_airc = 1;
+    static size_t const num_subm = 5;   /**< The number of Submarines*/
+    static size_t const num_dest = 4;   /**< The number of Destoyer*/
+    static size_t const num_bash = 3;   /**< The number of Battleships*/
+    static size_t const num_airc = 1;   /**< The number of Air Carriers*/
 
     Submarine subm[num_subm];
     Destroyer dest[num_dest];
     Battleship bash[num_bash];
     AirCarrier airc[num_airc];
-
-    // all ships
-    //Submarine subm1;    /**< Submarine 1. */
-    //Submarine subm2;    /**< Submarine 2. */
-    //Submarine subm3;    /**< Submarine 3. */
-    //Submarine subm4;    /**< Submarine 4. */
-    //Submarine subm5;    /**< Submarine 5. */
-    //Destroyer dest1;    /**< Destroyer 1. */
-    //Destroyer dest2;    /**< Destroyer 2. */
-    //Destroyer dest3;    /**< Destroyer 3. */
-    //Destroyer dest4;    /**< Destroyer 4. */
-    //Battleship bash1;   /**< Battleship 1. */
-    //Battleship bash2;   /**< Battleship 2. */
-    //Battleship bash3;   /**< Battleship 3. */
-    //AirCarrier airc;    /**< Air carrier. */
 
 public:
 
@@ -71,24 +56,27 @@ public:
     bool check_lose();
     void bomb_enemy_field(Board& _en_field, size_t _x, size_t _y);
 
-    // player.set_ship() with a specific lenght for each function
-    void set_ship(Ship* _ship, size_t _x1, size_t _y1, size_t _x2, size_t _y2);
-    void set_ship(Ship* _ship, size_t _x1, size_t _y1, size_t _x2, size_t _y2, size_t _x3, size_t _y3);
-    void set_ship(Ship* _ship, size_t _x1, size_t _y1, size_t _x2, size_t _y2, size_t _x3, size_t _y3,
-                  size_t _x4, size_t _y4);
-    void set_ship(Ship* _ship, size_t _x1, size_t _y1, size_t _x2, size_t _y2, size_t _x3, size_t _y3,
-                  size_t _x4, size_t _y4, size_t _x5, size_t _y5);
+    //bool place_ship(Ship::type, Square* _sq1, Square* _sq2, Square* _sq3 = NULL, Square* _sq4 = NULL, Square* _sq5 = NULL);
 
-    // member func. that returns a reference to the players board
-    // just to enable the enemy to bomb the field directly
-    Board& return_board_ref();    
+    bool place_ship(size_t _type, size_t _num, size_t _x1, size_t _y1, size_t _x2, size_t _y2,
+                    size_t _x3 = 0, size_t _y3 = 0, size_t _x4 = 0, size_t _y4 = 0, size_t _x5 = 0, size_t _y5 = 0);
+
+
+    // member func. that return references to the players large Objects
+    // to enable easy and direct interaction
+    Board& return_board_ref();
+    Submarine& get_Submarine_ref(size_t _num);
+    Destroyer& get_Destroyer_ref(size_t _num);
+    Battleship& get_BattleShip_ref(size_t _num);
+    AirCarrier& get_AirCarrier_ref(size_t _num);
+
+    Ship* get_ship_ptr(size_t _type, size_t _num);
 
     // member func. for testing purposes
     void show_field();
     void show_enemy_field(Board& _en_field);
     void show_ships();
 
-    Ship* get_ship_ptr(size_t _type, size_t _num);
 };
 
 # endif // PLAYER_H

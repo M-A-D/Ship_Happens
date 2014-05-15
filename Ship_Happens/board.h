@@ -39,10 +39,26 @@ public:
 
     void clear_board();
     bool init_board();
+    bool hit_square(Square* _sq);
 
-    bool hit_square(size_t _x, size_t _y);
     void disable_square(size_t _x, size_t _y);
+    bool get_square_empty(Square* _sq1, Square* _sq2, Square* _sq3 = NULL, Square* _sq4 = NULL,
+                          Square* _sq5 = NULL);
+
     Square* get_Square_ptr(size_t _x, size_t _y);
+
+    // differnt functions for different ship_lenghts
+    void set_ship(Square* _sq1, Square* _sq2);
+    void set_ship(Square* _sq1, Square* _sq2, Square* _sq3);
+    void set_ship(Square* _sq1, Square* _sq2, Square* _sq3, Square* _sq4);
+    void set_ship(Square* _sq1, Square* _sq2, Square* _sq3, Square* _sq4, Square* _sq5);
+
+    
+
+    // help and test functions for console debugging
+    bool hit_square(size_t _x, size_t _y);
+    void draw_board();
+    void show_board();
 
     // differnt functions for different ship_lenghts
     void set_ship(size_t _x1, size_t _y1, size_t _x2, size_t _y2);
@@ -52,9 +68,6 @@ public:
     void set_ship(size_t _x1, size_t _y1, size_t _x2, size_t _y2, size_t _x3, size_t _y3,
                   size_t _x4, size_t _y4, size_t _x5, size_t _y5);
 
-    // help and test functions for console debugging
-    void draw_board();
-    void show_board();
 };
 
 # endif // BOARD_H

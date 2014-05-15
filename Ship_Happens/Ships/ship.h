@@ -45,7 +45,7 @@
      void display_ship();
 
 
-     size_t get_lenght();
+     virtual size_t get_lenght();
  };
 
  # endif // SHIP_H

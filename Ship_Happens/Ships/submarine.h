@@ -33,6 +33,8 @@ public:
     ~Submarine();
 
     size_t get_lenght();
+    void display_ship();
+    void set_ship(Square* _sq1, Square* _sq2);
 
 };
 

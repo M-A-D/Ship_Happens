@@ -36,16 +36,20 @@ Ship::~Ship() {
 }
 
 /**
- * Set ship back to normal
+ * @brief Ship::reset_ship
+ * Set ship back to normal.
+ * Ship::alive = true
+ * Ship::set = false
+ * Ship::position[0] -> Ship::position[lenght] = NULL
  */
 void Ship::reset_ship() {
-    Ship::alive = true;
-    Ship::set = false;
+     Ship::alive = true;
+     Ship::set = false;
 
-    // delete the saved positions of the ship
-    for(size_t count = 0; count <= Ship::lenght; count++){
-        Ship::position[count] = NULL;
-    }
+     // delete the saved positions of the ship
+     for(size_t count = 0; count <= Ship::lenght; count++){
+         Ship::position[count] = NULL;
+     }
 }
 
 /**
@@ -67,9 +71,15 @@ void Ship::set_ship(size_t _position, Square* _sqn) {
  * another registry.
  * (submarine)
  */
+/**
+ * @brief Ship::set_ship
+ * @param _sq1
+ * @param _sq2
+ */
 void Ship::set_ship(Square* _sq1, Square* _sq2) {
     Ship::position[0] = _sq1;
     Ship::position[1] = _sq2;
+    Ship::set = true;
 }
 
 /**
@@ -82,6 +92,7 @@ void Ship::set_ship(Square *_sq1, Square *_sq2, Square *_sq3) {
     Ship::position[0] = _sq1;
     Ship::position[1] = _sq2;
     Ship::position[2] = _sq3;
+    Ship::set = true;
 }
 
 /*
@@ -93,6 +104,7 @@ void Ship::set_ship(Square* _sq1, Square* _sq2, Square* _sq3, Square* _sq4) {
     Ship::position[1] = _sq2;
     Ship::position[2] = _sq3;
     Ship::position[3] = _sq4;
+    Ship::set = true;
 }
 
 /*
@@ -105,6 +117,7 @@ void Ship::set_ship(Square* _sq1, Square* _sq2, Square* _sq3, Square* _sq4, Squa
     Ship::position[2] = _sq3;
     Ship::position[3] = _sq4;
     Ship::position[4] = _sq5;
+    Ship::set = true;
 }
 
 
@@ -146,8 +159,8 @@ void Ship::display_ship() {
         else {
             std::cout << "o";
         }
-        std::cout << std::endl;
     }
+    std::cout << std::endl;
 }
 
 /**

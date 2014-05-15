@@ -30,6 +30,9 @@ public:
     ~Destroyer();
 
     size_t get_lenght();
+    void display_ship();
+    void set_ship(Square* _sq1, Square* _sq2, Square* _sq3);
+    void reset_ship();
 };
 
 #endif // DESTROYER_H

@@ -47,3 +47,30 @@ Submarine::~Submarine() {
 size_t Submarine::get_lenght() {
     return Submarine::lenght;
 }
+
+/**
+ * @brief Submarine::set_ship
+ * @param _sq1
+ * @param _sq2
+ */
+void Submarine::set_ship(Square* _sq1, Square* _sq2) {
+    Submarine::position[0] = _sq1;
+    Submarine::position[1] = _sq2;
+    Submarine::set = true;
+}
+
+/**
+ * @brief Submarine::display_ship
+ */
+void Submarine::display_ship() {
+    for(size_t count = 0; count < (Submarine::lenght); count++) {
+
+        if (Submarine::position[count]->get_square_hit()) {
+            std::cout << "X";
+        }
+        else {
+            std::cout << "o";
+        }
+    }
+    std::cout << std::endl;
+}
