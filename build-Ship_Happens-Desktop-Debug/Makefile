@@ -46,23 +46,25 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../Ship_Happens/main.cpp \
-		../Ship_Happens/square.cpp \
-		../Ship_Happens/board.cpp \
-		../Ship_Happens/player.cpp \
-		../Ship_Happens/Ships/destroyer.cpp \
-		../Ship_Happens/Ships/battleship.cpp \
-		../Ship_Happens/Ships/submarine.cpp \
-		../Ship_Happens/Ships/ship.cpp \
-		../Ship_Happens/Ships/air_carrier.cpp 
+		../Ship_Happens/Player/Ships/ship.cpp \
+		../Ship_Happens/Player/Ships/submarine.cpp \
+		../Ship_Happens/Player/Ships/destroyer.cpp \
+		../Ship_Happens/Player/Ships/battleship.cpp \
+		../Ship_Happens/Player/Ships/air_carrier.cpp \
+		../Ship_Happens/Player/square.cpp \
+		../Ship_Happens/Player/board.cpp \
+		../Ship_Happens/Player/player.cpp \
+		../Ship_Happens/game.cpp 
 OBJECTS       = main.o \
+		ship.o \
+		submarine.o \
+		destroyer.o \
+		battleship.o \
+		air_carrier.o \
 		square.o \
 		board.o \
 		player.o \
-		destroyer.o \
-		battleship.o \
-		submarine.o \
-		ship.o \
-		air_carrier.o
+		game.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/shell-unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -361,58 +363,76 @@ compiler_clean:
 ####### Compile
 
 main.o: ../Ship_Happens/main.cpp ../Ship_Happens/my_headers.h \
-		../Ship_Happens/player.h \
-		../Ship_Happens/board.h \
-		../Ship_Happens/square.h \
-		../Ship_Happens/Ships/submarine.h \
-		../Ship_Happens/Ships/ship.h
+		../Ship_Happens/Player/player.h \
+		../Ship_Happens/Player/board.h \
+		../Ship_Happens/Player/square.h \
+		../Ship_Happens/Player/Ships/submarine.h \
+		../Ship_Happens/Player/Ships/ship.h \
+		../Ship_Happens/Player/Ships/destroyer.h \
+		../Ship_Happens/Player/Ships/battleship.h \
+		../Ship_Happens/Player/Ships/air_carrier.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Ship_Happens/main.cpp
 
-square.o: ../Ship_Happens/square.cpp ../Ship_Happens/square.h \
+ship.o: ../Ship_Happens/Player/Ships/ship.cpp ../Ship_Happens/Player/Ships/ship.h \
+		../Ship_Happens/my_headers.h \
+		../Ship_Happens/Player/square.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ship.o ../Ship_Happens/Player/Ships/ship.cpp
+
+submarine.o: ../Ship_Happens/Player/Ships/submarine.cpp ../Ship_Happens/Player/Ships/submarine.h \
+		../Ship_Happens/my_headers.h \
+		../Ship_Happens/Player/Ships/ship.h \
+		../Ship_Happens/Player/square.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o submarine.o ../Ship_Happens/Player/Ships/submarine.cpp
+
+destroyer.o: ../Ship_Happens/Player/Ships/destroyer.cpp ../Ship_Happens/Player/Ships/destroyer.h \
+		../Ship_Happens/my_headers.h \
+		../Ship_Happens/Player/Ships/ship.h \
+		../Ship_Happens/Player/square.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o destroyer.o ../Ship_Happens/Player/Ships/destroyer.cpp
+
+battleship.o: ../Ship_Happens/Player/Ships/battleship.cpp ../Ship_Happens/Player/Ships/battleship.h \
+		../Ship_Happens/my_headers.h \
+		../Ship_Happens/Player/Ships/ship.h \
+		../Ship_Happens/Player/square.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o battleship.o ../Ship_Happens/Player/Ships/battleship.cpp
+
+air_carrier.o: ../Ship_Happens/Player/Ships/air_carrier.cpp ../Ship_Happens/Player/Ships/air_carrier.h \
+		../Ship_Happens/my_headers.h \
+		../Ship_Happens/Player/Ships/ship.h \
+		../Ship_Happens/Player/square.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o air_carrier.o ../Ship_Happens/Player/Ships/air_carrier.cpp
+
+square.o: ../Ship_Happens/Player/square.cpp ../Ship_Happens/Player/square.h \
 		../Ship_Happens/my_headers.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o square.o ../Ship_Happens/square.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o square.o ../Ship_Happens/Player/square.cpp
 
-board.o: ../Ship_Happens/board.cpp ../Ship_Happens/my_headers.h \
-		../Ship_Happens/board.h \
-		../Ship_Happens/square.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o board.o ../Ship_Happens/board.cpp
+board.o: ../Ship_Happens/Player/board.cpp ../Ship_Happens/my_headers.h \
+		../Ship_Happens/Player/board.h \
+		../Ship_Happens/Player/square.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o board.o ../Ship_Happens/Player/board.cpp
 
-player.o: ../Ship_Happens/player.cpp ../Ship_Happens/my_headers.h \
-		../Ship_Happens/player.h \
-		../Ship_Happens/board.h \
-		../Ship_Happens/square.h \
-		../Ship_Happens/Ships/submarine.h \
-		../Ship_Happens/Ships/ship.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o player.o ../Ship_Happens/player.cpp
+player.o: ../Ship_Happens/Player/player.cpp ../Ship_Happens/my_headers.h \
+		../Ship_Happens/Player/player.h \
+		../Ship_Happens/Player/board.h \
+		../Ship_Happens/Player/square.h \
+		../Ship_Happens/Player/Ships/submarine.h \
+		../Ship_Happens/Player/Ships/ship.h \
+		../Ship_Happens/Player/Ships/destroyer.h \
+		../Ship_Happens/Player/Ships/battleship.h \
+		../Ship_Happens/Player/Ships/air_carrier.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o player.o ../Ship_Happens/Player/player.cpp
 
-destroyer.o: ../Ship_Happens/Ships/destroyer.cpp ../Ship_Happens/Ships/destroyer.h \
+game.o: ../Ship_Happens/game.cpp ../Ship_Happens/game.h \
+		../Ship_Happens/Player/player.h \
 		../Ship_Happens/my_headers.h \
-		../Ship_Happens/Ships/ship.h \
-		../Ship_Happens/square.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o destroyer.o ../Ship_Happens/Ships/destroyer.cpp
-
-battleship.o: ../Ship_Happens/Ships/battleship.cpp ../Ship_Happens/Ships/battleship.h \
-		../Ship_Happens/my_headers.h \
-		../Ship_Happens/square.h \
-		../Ship_Happens/Ships/ship.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o battleship.o ../Ship_Happens/Ships/battleship.cpp
-
-submarine.o: ../Ship_Happens/Ships/submarine.cpp ../Ship_Happens/my_headers.h \
-		../Ship_Happens/Ships/submarine.h \
-		../Ship_Happens/Ships/ship.h \
-		../Ship_Happens/square.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o submarine.o ../Ship_Happens/Ships/submarine.cpp
-
-ship.o: ../Ship_Happens/Ships/ship.cpp ../Ship_Happens/Ships/ship.h \
-		../Ship_Happens/my_headers.h \
-		../Ship_Happens/square.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ship.o ../Ship_Happens/Ships/ship.cpp
-
-air_carrier.o: ../Ship_Happens/Ships/air_carrier.cpp ../Ship_Happens/Ships/air_carrier.h \
-		../Ship_Happens/my_headers.h \
-		../Ship_Happens/square.h \
-		../Ship_Happens/Ships/ship.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o air_carrier.o ../Ship_Happens/Ships/air_carrier.cpp
+		../Ship_Happens/Player/board.h \
+		../Ship_Happens/Player/square.h \
+		../Ship_Happens/Player/Ships/submarine.h \
+		../Ship_Happens/Player/Ships/ship.h \
+		../Ship_Happens/Player/Ships/destroyer.h \
+		../Ship_Happens/Player/Ships/battleship.h \
+		../Ship_Happens/Player/Ships/air_carrier.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o game.o ../Ship_Happens/game.cpp
 
 ####### Install
 

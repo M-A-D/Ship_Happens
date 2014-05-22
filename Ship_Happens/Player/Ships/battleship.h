@@ -17,6 +17,7 @@
 # include "my_headers.h"
 # include "ship.h"
 
+
 /**
  * @brief The Battleship class
  *
@@ -34,9 +35,15 @@ public:
     ~Battleship();
 
     size_t get_lenght();
+    bool get_ship_set();
+    bool get_ship_alive();
     void reset_ship();
+    void check_ship_stat();
     void display_ship();
     void set_ship(Square* _sq1, Square* _sq2, Square* _sq3, Square* _sq4);
+
+    // help func for terminal testing purposes
+    void print_ship();
 };
 
 #endif // BATTLESHIP_H

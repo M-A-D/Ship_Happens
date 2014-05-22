@@ -17,7 +17,7 @@
 /**
  * @brief Square::Square
  * std constructor.
- * a new square which hast nothing set, which was not hit and is not disabled will be created
+ * a new square which has nothing set, which was not hit and is not disabled will be created
  * @param Square::set = false
  * @param Square::hit = false
  * @param Square::disabled = false
@@ -72,9 +72,6 @@ bool Square::set_square() {
 }
 
 /**
-
- */
-/**
  * @brief Square::un_set_square
  * removes set flag from the square.
  * if the set flag has been removed Square::set will set back to false
@@ -82,7 +79,6 @@ bool Square::set_square() {
  */
 void Square::un_set_square() {
     Square::set = false;
-
 }
 
 /**
@@ -96,16 +92,19 @@ bool Square::get_square_set() {
     return Square::set;
 }
 
+
 /**
  * @brief Square::set_hit
  * square got hit.
  * if a square got thit the member Square::hit will be set true
  */
 void Square::set_hit() {
+    std::cout << "Well at least we get to setting the ship" << std::endl;
     if(Square::legal()) {
             Square::hit = true;
     }
 }
+
 
 /**
  * @brief Square::un_set_hit
@@ -117,6 +116,7 @@ void Square::un_set_hit() {
     Square::hit = false;
 }
 
+
 /**
  * @brief Square::get_square_hit
  * checks if square is hit, basically returns the value of the Square::hit flag
@@ -125,6 +125,7 @@ void Square::un_set_hit() {
 bool Square::get_square_hit() {
     return Square::hit;
 }
+
 
 /**
  * @brief Square::set_disabled
@@ -137,6 +138,7 @@ void Square::set_disabled () {
     Square::disabled = true;
 }
 
+
 /**
  * @brief Square::un_set_disabled
  * Enables square.
@@ -147,6 +149,7 @@ void Square::un_set_disabled() {
     Square::disabled = false;
 }
 
+
 /**
  * @brief Square::get_square_disabled
  * Checks if square is disabled.
@@ -156,6 +159,7 @@ void Square::un_set_disabled() {
 bool Square::get_square_disabled() {
     return Square::disabled;
 }
+
 
 /**
  * @brief Square::legal

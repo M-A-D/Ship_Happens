@@ -39,6 +39,7 @@ Submarine::~Submarine() {
 
 }
 
+
 /**
  * @brief Submarine::get_lenght
  *
@@ -47,6 +48,47 @@ Submarine::~Submarine() {
 size_t Submarine::get_lenght() {
     return Submarine::lenght;
 }
+
+/**
+ * @brief Submarine::get_ship_set
+ * @return
+ */
+bool Submarine::get_ship_set() {
+    return Submarine::set;
+}
+
+
+/**
+ * @brief Submarine::get_ship_alive
+ * @return
+ */
+bool Submarine::get_ship_alive() {
+    return Submarine::alive;
+}
+
+
+/**
+ * @brief Submarine::check_ship_stat
+ * @return Submarine::alive
+ */
+void Submarine::check_ship_stat() {
+    size_t comp = 0;
+    for(size_t count = 0; count < Submarine::lenght; count++) {
+        if (Submarine::position[count]->get_square_hit()) {
+            comp++; // increase the number of hits
+        }
+    }
+
+    /**
+     * compair the ammount of squares that already got hit with the
+     * lenght of the ship, if they are equal the ship has been
+     * destroyed, the flag Ship::alive will be set to false
+     */
+     if (comp == (Submarine::lenght)) {
+         Submarine::alive = false;
+     }
+}
+
 
 /**
  * @brief Submarine::set_ship
@@ -59,10 +101,25 @@ void Submarine::set_ship(Square* _sq1, Square* _sq2) {
     Submarine::set = true;
 }
 
+
 /**
- * @brief Submarine::display_ship
+ * @brief Submarine::reset_ship
  */
-void Submarine::display_ship() {
+void Submarine::reset_ship() {
+    Submarine::alive = true;
+    Submarine::set = false;
+
+    // delete the saved positions of the submarine
+    for(size_t count = 0; count < Submarine::lenght; count++){
+        Submarine::position[count] = NULL;
+    }
+}
+
+
+/**
+ * @brief Submarine::print_ship
+ */
+void Submarine::print_ship() {
     for(size_t count = 0; count < (Submarine::lenght); count++) {
 
         if (Submarine::position[count]->get_square_hit()) {

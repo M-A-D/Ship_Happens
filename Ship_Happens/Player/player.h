@@ -29,7 +29,7 @@ class Player {
 private:
     std::string name;   /**< Player name. */
     bool lost;          /**< Bool lost. */
-    bool ready;         /**< Bool ready. indicates if a player is ready with his turn*/
+    bool active;         /**< Bool active. indicates if a player has finished his turn*/
     Board own_field;    /**< Board. */
     static size_t const num_subm = 5;   /**< The number of Submarines*/
     static size_t const num_dest = 4;   /**< The number of Destoyer*/
@@ -40,6 +40,10 @@ private:
     Destroyer dest[num_dest];
     Battleship bash[num_bash];
     AirCarrier airc[num_airc];
+
+protected:
+    void check_ships();
+
 
 public:
 
@@ -52,14 +56,20 @@ public:
     void set_name(std::string _name);
     std::string get_name();
 
+
+    size_t get_num_submarines();
+    size_t get_num_destroyer();
+    size_t get_num_battleships();
+    size_t get_num_aircarrier();
+
     // basic player abilitie
     bool check_lose();
-    void bomb_enemy_field(Board& _en_field, size_t _x, size_t _y);
+    bool bomb_enemy_field(Board& _en_field, size_t _x, size_t _y);
 
-    //bool place_ship(Ship::type, Square* _sq1, Square* _sq2, Square* _sq3 = NULL, Square* _sq4 = NULL, Square* _sq5 = NULL);
+    void change_activ_status();
 
-    bool place_ship(size_t _type, size_t _num, size_t _x1, size_t _y1, size_t _x2, size_t _y2,
-                    size_t _x3 = 0, size_t _y3 = 0, size_t _x4 = 0, size_t _y4 = 0, size_t _x5 = 0, size_t _y5 = 0);
+
+    bool place_ship(Square* _sq1, Square* _sq2, Square* _sq3 = NULL, Square* _sq4 = NULL, Square* _sq5 = NULL);
 
 
     // member func. that return references to the players large Objects
@@ -70,13 +80,12 @@ public:
     Battleship& get_BattleShip_ref(size_t _num);
     AirCarrier& get_AirCarrier_ref(size_t _num);
 
-    Ship* get_ship_ptr(size_t _type, size_t _num);
-
     // member func. for testing purposes
-    void show_field();
-    void show_enemy_field(Board& _en_field);
-    void show_ships();
-
+    void print_field();
+    void print_enemy_field(Board& _en_field);
+    void print_ships();
+    bool place_ship(size_t _type, size_t _num, size_t _x1, size_t _y1, size_t _x2, size_t _y2,
+                    size_t _x3 = 0, size_t _y3 = 0, size_t _x4 = 0, size_t _y4 = 0, size_t _x5 = 0, size_t _y5 = 0);
 };
 
 # endif // PLAYER_H

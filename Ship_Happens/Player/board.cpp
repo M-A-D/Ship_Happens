@@ -132,6 +132,7 @@ void Board::disable_square(size_t _x, size_t _y) {
  */
 bool Board::get_square_empty(Square *_sq1, Square *_sq2, Square *_sq3, Square *_sq4, Square *_sq5) {
     bool empty, em3, em4, em5;
+
     empty = (!(_sq1->get_square_set()) & !(_sq2->get_square_set()));
 
     /**
@@ -207,11 +208,26 @@ void Board::set_ship(Square* _sq1, Square* _sq2, Square* _sq3, Square* _sq4) {
 void Board::set_ship(Square* _sq1, Square* _sq2, Square* _sq3, Square* _sq4, Square* _sq5) {
     _sq1->set_square();
     _sq2->set_square();
-    _sq3->set_square();
-    _sq4->set_square();
-    _sq5->set_square();
+
+    if(_sq3 != NULL) {
+        _sq3->set_square();
+    }
+
+    if(_sq4 != NULL) {
+        _sq4->set_square();
+    }
+
+    if(_sq5 != NULL) {
+        _sq5->set_square();
+    }
 }
 
+
+/**
+ * @brief Board::hit_square
+ * @param _sq
+ * @return
+ */
 bool Board::hit_square(Square* _sq) {
    // if the square is disabled one should not be able to hit it
    if(_sq->get_square_disabled()) {
@@ -230,49 +246,57 @@ bool Board::hit_square(Square* _sq) {
    }
 }
 
+
 /*
  * Help functions for console debugging
  */
+
 
 /**
  * board.draw_board() is a help function for console testing purposes
  * it displays each set field with a 'X' and each free field with 'O'
  */
-void Board::draw_board() {
-    std::cout << "this is the your board:\n" << "A B C D E F G H I K" << std::endl;
+void Board::print_own_board() {
+    std::cout << "this is the your board:\n" << " A B C D E F G H I K" << std::endl;
     for(size_t line = 0; line < Board::widht; line++) {
         for(size_t column = 0; column< Board::lenght; column++) {
             if(Board::field [column][line].get_square_set()) {
-                std::cout << "X ";
+                std::cout << "|X";
             }
 
             else
-                std:: cout << "O ";
+                std:: cout << "| ";
         }
-        std::cout << " " << line+1 << "\n";	// print line numbers
+        std::cout << "| " << line+1 << "\n";	// print line numbers
     }
     std::cout << std::endl;
 }
+
 
 /**
  * board.show_board() is a help function for console testing purposes
  * it shows each hit field with a 'X' and those who are not with an 'O'
  */
-void Board::show_board() {
-    std::cout << "this is the enemies board:\n" << "A B C D E F G H I K" << std::endl;
+void Board::print_enemy_board() {
+    std::cout << "this is the enemies board:\n" << " A B C D E F G H I K" << std::endl;
     for(size_t line = 0; line < Board::widht; line++) {
         for(size_t column = 0; column< Board::lenght; column++) {
-            if(Board::field [column][line].get_square_hit()) {
-                std::cout << "X ";
+            if((Board::field [column][line].get_square_hit()) &
+               (Board::field [column][line].get_square_set())) {
+                std::cout << "|X";
             }
 
+            else if(Board::field[column][line].get_square_hit()) {
+                std::cout << "|o";
+            }
             else
-                std:: cout << "O ";
+                std:: cout << "| ";
         }
-        std::cout << " " << line+1 << "\n";	// print line numbers
+        std::cout << "| " << line+1 << "\n";	// print line numbers
     }
     std::cout << std::endl;
 }
+
 
 /**
  * Get the adress of a specific Square in the Board.
@@ -286,6 +310,7 @@ void Board::show_board() {
 Square* Board::get_Square_ptr(size_t _x, size_t _y) {
     return &(Board::field[_x-1][_y-1]);
 }
+
 
 /**
  * set a square hit.
@@ -316,6 +341,7 @@ bool Board::hit_square(size_t _x, size_t _y) {
     }
 }
 
+
 /**
  * board.set_ship(x1,y1,x2,y2) to set a ship of lenght 2
  * @param size_t _x1
@@ -327,6 +353,7 @@ bool Board::hit_square(size_t _x, size_t _y) {
      Board::field[_x1-1][_y1-1].set_square();
      Board::field[_x2-1][_y2-1].set_square();
 }
+
 
 /**
  * board.set_ship(x1,y1,x2,y2,x3,y3) to set a ship of lenght 3
@@ -342,6 +369,7 @@ void Board::set_ship(size_t _x1, size_t _y1, size_t _x2, size_t _y2, size_t _x3,
      Board::field[_x2-1][_y2-1].set_square();
      Board::field[_x3-1][_y3-1].set_square();
 }
+
 
 /**
  * board.set_ship(x1,y1,x2,y2,x3,y3,x4,y4) to set a ship of lenght 4
@@ -359,6 +387,7 @@ void Board::set_ship(size_t _x1, size_t _y1, size_t _x2, size_t _y2, size_t _x3,
      Board::field[_x3-1][_y3-1].set_square();
      Board::field[_x4-1][_y4-1].set_square();
 }
+
 
 /**
  * board.set_ship(x1,y1,x2,y2,x3,y3,x4,y4,x5,y5) to set a ship of lenght 5

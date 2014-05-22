@@ -51,14 +51,15 @@ public:
     void set_ship(Square* _sq1, Square* _sq2);
     void set_ship(Square* _sq1, Square* _sq2, Square* _sq3);
     void set_ship(Square* _sq1, Square* _sq2, Square* _sq3, Square* _sq4);
-    void set_ship(Square* _sq1, Square* _sq2, Square* _sq3, Square* _sq4, Square* _sq5);
+    void set_ship(Square* _sq1, Square* _sq2, Square* _sq3 = NULL,
+                  Square* _sq4 = NULL, Square* _sq5 = NULL);
 
-    
+
 
     // help and test functions for console debugging
     bool hit_square(size_t _x, size_t _y);
-    void draw_board();
-    void show_board();
+    void print_own_board();
+    void print_enemy_board();
 
     // differnt functions for different ship_lenghts
     void set_ship(size_t _x1, size_t _y1, size_t _x2, size_t _y2);

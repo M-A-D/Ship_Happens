@@ -15,7 +15,8 @@
  # define SHIP_H
 
  # include "my_headers.h"
- # include "square.h"
+ # include "Player/square.h"
+
 
 /**
   * @brief The Ship class
@@ -44,8 +45,14 @@
      void check_ship_stat();
      void display_ship();
 
+     bool get_ship_stat();
+     bool get_ship_set();
+
 
      virtual size_t get_lenght();
+
+     // help func for terminal testing purposes
+     void print_ship();
  };
 
  # endif // SHIP_H
