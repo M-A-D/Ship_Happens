@@ -19,6 +19,7 @@
 
 
 /**
+ * @brief Ship::Ship
  * std constructor
  * a ship will be createt, which is still unharmed and not set to a specific position
  * @param Ship::alive = true
@@ -31,6 +32,7 @@ Ship::Ship() {
 
 
 /**
+ * @brief Ship::~Ship
  * destructor
  */
 Ship::~Ship() {
@@ -58,23 +60,9 @@ void Ship::reset_ship() {
 
 /**
  * @brief Ship::set_ship
- * Square pointers are used to tell a ship, where on the board it is located
- * this also helps to keep the the Ship::check_ship_stat() simple, because
- * each ship can check each square it sit's on.
- * @param _position
- * @param _sqn
- */
-void Ship::set_ship(size_t _position, Square* _sqn) {
-    Ship::position[_position] = _sqn;
-}
-
-
-/**
- * @brief Ship::set_ship
  * for a ship of the lenght of 2 squares, the ship knows the Squares
  * it sits on, a simple way to check a ships status, without using
- * another object.
- * (submarine)
+ * another object (submarine)
  * @param _sq1
  * @param _sq2
  */
@@ -104,7 +92,7 @@ void Ship::set_ship(Square *_sq1, Square *_sq2, Square *_sq3) {
 
 /**
  * @brief Ship::set_ship
- * for a ship of the lenght of 4 squares (air carrier)
+ * for a ship of the lenght of 4 squares (battleship)
  * @param _sq1
  * @param _sq2
  * @param _sq3
@@ -121,6 +109,7 @@ void Ship::set_ship(Square* _sq1, Square* _sq2, Square* _sq3, Square* _sq4) {
 
 /**
  * @brief Ship::set_ship
+ *
  * @param _sq1
  * @param _sq2
  * @param _sq3
@@ -145,6 +134,10 @@ void Ship::set_ship(Square* _sq1, Square* _sq2, Square* _sq3, Square* _sq4, Squa
  */
 void Ship::check_ship_stat() {
     size_t comp = 0;
+
+    /**
+     * count the squares that already got hit
+     */
     for(size_t count = 0; count < Ship::lenght; count++) {
         if (Ship::position[count]->get_square_hit()) {
             comp++; // increase the number of hits

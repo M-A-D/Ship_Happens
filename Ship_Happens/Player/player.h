@@ -24,22 +24,25 @@
 
 /**
  * @brief The Player class
+ *
+ * @author m-a-d
+ * @version 0.1
  */
 class Player {
 private:
-    std::string name;   /**< Player name. */
-    bool lost;          /**< Bool lost. */
-    bool active;         /**< Bool active. indicates if a player has finished his turn*/
-    Board own_field;    /**< Board. */
+    std::string name;   /**< Player name */
+    bool lost;          /**< Bool lost. will be set true if all ships are destroyed */
+    bool active;        /**< Bool active. indicates if a player has finished his turn*/
+    Board own_field;    /**< Board own_field. */
     static size_t const num_subm = 5;   /**< The number of Submarines*/
     static size_t const num_dest = 4;   /**< The number of Destoyer*/
     static size_t const num_bash = 3;   /**< The number of Battleships*/
     static size_t const num_airc = 1;   /**< The number of Air Carriers*/
 
-    Submarine subm[num_subm];
-    Destroyer dest[num_dest];
-    Battleship bash[num_bash];
-    AirCarrier airc[num_airc];
+    Submarine subm[num_subm];           /**< Array of submarines*/
+    Destroyer dest[num_dest];           /**< Array of destroyer*/
+    Battleship bash[num_bash];          /**< Array of battleships*/
+    AirCarrier airc[num_airc];          /**< Array of air carrier*/
 
 protected:
     void check_ships();
@@ -56,7 +59,6 @@ public:
     void set_name(std::string _name);
     std::string get_name();
 
-
     size_t get_num_submarines();
     size_t get_num_destroyer();
     size_t get_num_battleships();
@@ -67,8 +69,11 @@ public:
     bool bomb_enemy_field(Board& _en_field, size_t _x, size_t _y);
 
     void change_activ_status();
+    void set_active();
+    void set_not_active();
 
-
+    bool get_active();
+    bool get_lost();
     bool place_ship(Square* _sq1, Square* _sq2, Square* _sq3 = NULL, Square* _sq4 = NULL, Square* _sq5 = NULL);
 
 

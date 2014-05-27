@@ -19,16 +19,29 @@
 
 
 /**
-  * @brief The Ship class
-  *
-  */
+ * @brief The Ship class
+ * This class inherits all the basic data and functions a battleships ship has,
+ * each ship has a alive flag that will be set false if the ship has been destroyed
+ * a set flag that will be set true if the ship has successfully been placed on the
+ * field each ship has a defined lenght meassured in squaress, a type e.g. Submarine,
+ * destroyer, battleship, air carrier and so on. Each Ship also has a Square* array
+ * that connects the ship with the Squares it has been set on.
+ *
+ * @author m-a-d
+ * @version 0.1
+ */
  class Ship {
  private:
-     bool alive;                        /**< */
-     bool set;                          /**< */
-     static size_t const type = 0;      /**< */
-     static size_t const lenght = 2;    /**< */
-     Square *position[lenght];          /**< */
+     bool alive;                     /**< the alive flag indicates if the ship has
+                                          squares left that have not been hit yet*/
+     bool set;                       /**< the set flag indicates if the ship
+                                          has been set on the board*/
+     static size_t const type = 0;   /**< the type is just an id that can be used
+                                          to get a ships type 0 = ship*/
+     static size_t const lenght = 2; /**< the lenght of each ship is meassured in
+                                          Squares it takes on the field*/
+     Square* position[lenght];       /**< the position array holds pointer to the
+                                          boards squares, the ship has been placed on*/
 
  public:
      Ship();
@@ -37,7 +50,6 @@
 
      // a member function for every Ship_lenght
 
-     void set_ship(size_t _position, Square* _spn);
      void set_ship(Square* _sq1, Square* _sq2);
      void set_ship(Square* _sq1, Square* _sq2, Square* _sq3);
      void set_ship(Square* _sq1, Square* _sq2, Square* _sq3, Square* _sq4);

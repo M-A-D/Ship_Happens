@@ -95,7 +95,7 @@ bool Player::check_lose() {
 
         if(!(subm_ref.get_ship_alive())) {
             dest_ship_counter++;
-            std::cout << dest_ship_counter << std::endl;
+            //std::cout << dest_ship_counter << std::endl;
         }
     }
 
@@ -103,7 +103,7 @@ bool Player::check_lose() {
         Destroyer& dest_ref = Player::dest[count];
         if(!(dest_ref.get_ship_alive())) {
             dest_ship_counter ++;
-            std::cout << dest_ship_counter << std::endl;
+            //std::cout << dest_ship_counter << std::endl;
         }
     }
 
@@ -112,7 +112,7 @@ bool Player::check_lose() {
 
         if(!(bash_ref.get_ship_alive())) {
             dest_ship_counter ++;
-            std::cout << dest_ship_counter << std::endl;
+            //std::cout << dest_ship_counter << std::endl;
         }
     }
 
@@ -121,7 +121,7 @@ bool Player::check_lose() {
 
         if(!(airc_ref.get_ship_alive())) {
             dest_ship_counter ++;
-            std::cout << dest_ship_counter << std::endl;
+            //std::cout << dest_ship_counter << std::endl;
         }
     }
 
@@ -243,7 +243,7 @@ size_t Player::get_num_aircarrier() {
 bool Player::place_ship(Square *_sq1, Square *_sq2, Square *_sq3, Square *_sq4, Square *_sq5) {
     bool empty;
 
-    empty = Player::own_field.get_square_empty(_sq1, _sq2, _sq3, _sq4, _sq5);
+    empty = Player::own_field.get_squares_empty(_sq1, _sq2, _sq3, _sq4, _sq5);
 
     if(empty) {
         Player::own_field.set_ship(_sq1, _sq2, _sq3, _sq4, _sq5);
@@ -263,14 +263,10 @@ bool Player::bomb_enemy_field(Board& _en_field, size_t _x, size_t _y) {
     Square* _sq = _en_field.get_Square_ptr(_x, _y);
     bool free = false;
 
-    std::cout << "Now we should hit the field" << std::endl;
-    std::cout << _sq->get_square_hit() << std::endl;
-
     if(!(_sq->get_square_hit())) {
         free = true;
         _sq->set_hit();
     }
-    std::cout << free << std::endl;
     return free;
 }
 
@@ -280,7 +276,35 @@ bool Player::bomb_enemy_field(Board& _en_field, size_t _x, size_t _y) {
  */
 void Player::change_activ_status() {
     Player::check_ships();
+    Player::check_lose();
     Player::active = !(Player::active);
+}
+
+
+/**
+ * @brief Player::set_active
+ */
+void Player::set_active() {
+    Player::check_ships();
+    Player::check_lose();
+    Player::active = true;
+}
+
+
+/**
+ * @brief Player::set_not_active
+ */
+void Player::set_not_active() {
+    Player::active = false;
+}
+
+
+/**
+ * @brief Player::get_active
+ * @return Player::active
+ */
+bool Player::get_active() {
+    return Player::active;
 }
 
 
@@ -411,7 +435,7 @@ bool Player::place_ship(size_t _type, size_t _num, size_t _x1, size_t _y1, size_
 
     // type 1 = submarine -> lenght = 2
     case 1:
-        if(Player::own_field.get_square_empty(_sq1, _sq2)) {
+        if(Player::own_field.get_squares_empty(_sq1, _sq2)) {
             Player::own_field.set_ship(_x1, _y1, _x2, _y2);
             Player::subm[_num - 1].set_ship(Player::own_field.get_Square_ptr(_x1, _y1),
                                             Player::own_field.get_Square_ptr(_x2, _y2));
@@ -421,7 +445,7 @@ bool Player::place_ship(size_t _type, size_t _num, size_t _x1, size_t _y1, size_
 
     // type 2 = destroyer -> lenght = 3
     case 2:
-        if(Player::own_field.get_square_empty(_sq1, _sq2, _sq3)) {
+        if(Player::own_field.get_squares_empty(_sq1, _sq2, _sq3)) {
             Player::dest[_num - 1].set_ship(Player::own_field.get_Square_ptr(_x1, _y1),
                                             Player::own_field.get_Square_ptr(_x2, _y2),
                                             Player::own_field.get_Square_ptr(_x3, _y3));
@@ -432,7 +456,7 @@ bool Player::place_ship(size_t _type, size_t _num, size_t _x1, size_t _y1, size_
 
      // type 3 = battleship -> lenght = 4
      case 3:
-        if(Player::own_field.get_square_empty(_sq1, _sq2, _sq3, _sq4)) {
+        if(Player::own_field.get_squares_empty(_sq1, _sq2, _sq3, _sq4)) {
             Player::bash[_num -1].set_ship(Player::own_field.get_Square_ptr(_x1, _y1),
                                            Player::own_field.get_Square_ptr(_x2, _y2),
                                            Player::own_field.get_Square_ptr(_x3, _y3),
@@ -444,7 +468,7 @@ bool Player::place_ship(size_t _type, size_t _num, size_t _x1, size_t _y1, size_
 
     // type 4 = air carrier -> lenght = 5
     case 4:
-        if(Player::own_field.get_square_empty(_sq1, _sq2, _sq3, _sq4, _sq5)) {
+        if(Player::own_field.get_squares_empty(_sq1, _sq2, _sq3, _sq4, _sq5)) {
             Player::airc[_num - 1].set_ship(Player::own_field.get_Square_ptr(_x1, _y1),
                                             Player::own_field.get_Square_ptr(_x2, _y2),
                                             Player::own_field.get_Square_ptr(_x3, _y3),

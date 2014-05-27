@@ -25,12 +25,15 @@
  * Sq_n(lenght, widht) in the bottom right corner. That means a board consists of x * y
  * Squares that represent all the possible points to set a players ships on or the
  * points of the enemies board that one could bomb.
+ *
+ * @author m-a-d
+ * @version 0.1
  */
 class Board {
 private:
-    size_t lenght;          /**< */
-    size_t widht;           /**< */
-    Square field[10][10];   /**< */
+    size_t lenght;          /**< the number of collumns of a board*/
+    size_t widht;           /**< the number of lines of a board*/
+    Square field[10][10];   /**< two dimensional array of Squares [number of collumns][number of lines]*/
 
 public:
     Board ();
@@ -42,10 +45,11 @@ public:
     bool hit_square(Square* _sq);
 
     void disable_square(size_t _x, size_t _y);
-    bool get_square_empty(Square* _sq1, Square* _sq2, Square* _sq3 = NULL, Square* _sq4 = NULL,
+    bool get_squares_empty(Square* _sq1, Square* _sq2, Square* _sq3 = NULL, Square* _sq4 = NULL,
                           Square* _sq5 = NULL);
 
     Square* get_Square_ptr(size_t _x, size_t _y);
+    size_t get_lenght();
 
     // differnt functions for different ship_lenghts
     void set_ship(Square* _sq1, Square* _sq2);

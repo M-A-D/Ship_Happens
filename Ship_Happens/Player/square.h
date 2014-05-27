@@ -20,6 +20,9 @@
  * @brief The Square class
  * a single pice of a board, it mainly consists of flags, that indicate it's current
  * status e.g. set, hit or disabled
+ *
+ * @author m-a-d
+ * @version 0.1
  */
 class Square{
 private:

@@ -48,13 +48,19 @@ public:
 
     void init_game();
 
-    void change_player_names();
+    void change_player_name(std::string& _name);
+    void change_enemy_name(std::string& _name);
+
+    std::string get_player_name();
+    std::string get_enemy_name();
+
+    bool change_activity_status();
 
     void bomb_square(Square* _sq);
     bool place_ships(Square* _sq1, Square* _sq2, Square* sq3 = NULL, Square* _sq4 = NULL, Square* _sq5 = NULL);
 
     // help functions for terminal debugging
-
+    void change_player_names();
     void player_set_ship_routine();
 
     void player_set_ship_test();

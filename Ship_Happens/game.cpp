@@ -50,13 +50,52 @@ Game::~ Game() {
  * for Player 1 to finish
  */
 void Game::init_game() {
-    Game::player.change_activ_status();
-    Game::enemy.change_activ_status();
+    Game::player.set_active();
+}
+
+
+/**
+ * @brief Game::change_player_name
+ * @param _name
+ */
+void Game::change_player_name(std::string& _name) {
+    Game::player.set_name(_name);
+}
+
+
+/**
+ * @brief Game::change_enemy_name
+ * @param _name
+ * a function that enables you to change the name of player 2 from an other
+ * source e.g. from a graphic surface
+ */
+void Game::change_enemy_name(std::string& _name) {
+    Game::enemy.set_name(_name);
+}
+
+
+/**
+ * @brief get_player_name
+ * @return
+ */
+std::string Game::get_player_name() {
+    return Game::player.get_name();
+}
+
+
+/**
+ * @brief get_enemy_name
+ * @return
+ */
+std::string Game::get_enemy_name() {
+    return Game::enemy.get_name();
 }
 
 
 /**
  * @brief Game::change_player_names
+ * help function for terminal debugging, basically reads a string from
+ * stdin and calls the player.set_name() func. from the player class
  */
 void Game::change_player_names() {
     std::string player_name;
@@ -71,11 +110,36 @@ void Game::change_player_names() {
 
 
 /**
+ * @brief Game::change_activity_status
+ * this functioin rotates the activity status, if the first player is active
+ * the second player should not be active and the other way round, that means
+ * everytime player 1 is active and we call this function we want to set
+ * player 2 active and player 1 not active
+ *
+ * @return bool active
+ */
+bool Game::change_activity_status() {
+    if(Game::player.get_active()) {
+        Game::player.set_not_active();
+        Game::enemy.set_active();
+        return true;
+    }
+
+    else if (Game::enemy.get_active()) {
+        Game::enemy.set_not_active();
+        Game::player.set_active();
+        return true;
+    }
+    return false;
+}
+
+
+/**
  * @brief Game::set_ship_routine
  * defines a prototype routine, that can be used to set a ship from the graphic surface
  */
 bool Game::place_ships(Square* _sq1, Square* _sq2, Square* _sq3, Square* _sq4, Square* _sq5) {
-    if(Game::player.return_board_ref().get_square_empty(_sq1, _sq2, _sq3, _sq4, _sq5)) {
+    if(Game::player.return_board_ref().get_squares_empty(_sq1, _sq2, _sq3, _sq4, _sq5)) {
         Game::player.place_ship(_sq1, _sq2, _sq3, _sq4, _sq5);
     }
     return true;
@@ -104,10 +168,19 @@ void Game::player_set_ship_routine() {
 
     std::cout << Game::player.get_name() << " place your ships on the field" << std::endl;
 
+    /**
+     * itterate over the player.subm[] starting with 1 till player.num_subm
+     * reading individual start and end position koordinates from stdin and
+     * put them on the board
+     */
     for(size_t count = 1; count <= Game::player.get_num_submarines(); count++) {
         Submarine& subm_ref = Game::player.get_Submarine_ref(count);
         while(!(subm_ref.get_ship_set())) {
-            Game::read_ship_coordinates(_xa, _ya, _xe, _ye);
+            bool legal = false;
+            while(!legal) {
+                legal = Game::read_ship_coordinates(_xa, _ya, _xe, _ye);
+            }
+
             _sq1 = field.get_Square_ptr(xa, ya);
             _sq2 = field.get_Square_ptr(xe, ye);
 
@@ -119,6 +192,11 @@ void Game::player_set_ship_routine() {
 
     Game::player.print_field();
 
+    /**
+     * itterate over the player.dest[] starting with 1 till player.num_dest
+     * reading individual start and end position koordinates from stdin and
+     * put them on the board
+     */
     for(size_t count = 1; count <= Game::player.get_num_destroyer(); count++) {
         Destroyer& dest_ref = Game::player.get_Destroyer_ref(count);
         while(!(dest_ref.get_ship_set())) {
@@ -136,6 +214,11 @@ void Game::player_set_ship_routine() {
 
     Game::player.print_field();
 
+    /**
+     * itterate over the player.bash[] startin with 1 till player.num_bash
+     * reading individual start and end position koordinates from stdin and
+     * put them on the board
+     */
     for(size_t count = 1; count <= Game::player.get_num_battleships(); count++) {
         Battleship& bash_ref = Game::player.get_BattleShip_ref(count);
         while(!(bash_ref.get_ship_set())) {
@@ -154,6 +237,11 @@ void Game::player_set_ship_routine() {
 
     Game::player.print_field();
 
+    /**
+     * itterate over the player.airc[] starting with 1 till player.num_airc
+     * and reading each air carriers individuall start and ending point
+     * koordinates from stdin and put them on the field
+     */
     for(size_t count = 1; count <= Game::player.get_num_aircarrier(); count++) {
         AirCarrier& airc_ref = Game::player.get_AirCarrier_ref(count);
         while(!(airc_ref.get_ship_set())) {
@@ -178,6 +266,9 @@ void Game::player_set_ship_routine() {
 
 /**
  * @brief Game::enemy_set_ship_routine
+ * this member function mirrors the Game::player_set_ship_routine() and does basically
+ * the same thing it was created to enable console debugging before the network interface
+ * was created to show that the program is working
  */
 void Game::enemy_set_ship_routine() {
     Board& field = Game::enemy.return_board_ref();
@@ -286,52 +377,67 @@ void Game::enemy_set_ship_routine() {
 
 /**
  * @brief Game::bomb_field_routine
+ * this member function is another help function for terminal debugging purposes.
+ *
  */
 void Game::bomb_field_routine() {
     size_t xb, yb;
     size_t& _xb = xb;
     size_t& _yb = yb;
 
+     Game::player.set_active();
+
     while(!(Game::player.check_lose()) & !(Game::enemy.check_lose())) {
+        bool on_board = false;
 
-        Game::player.change_activ_status();
-        std::cout << Game::player.get_name() << " please select the field you want to bomb" << std::endl;
-        while(!(Game::read_bomb_coordinates(_xb, _yb))) {
-            std::cout << "Try again:" << std::endl;
+        while(! on_board) {
+            on_board = false;
+            if(Game::player.get_active()) {
+                std::cout << Game::player.get_name() << " please select the field you want to bomb" << std::endl;
+                on_board = Game::read_bomb_coordinates(_xb, _yb);
+            }
+            else if (Game::enemy.get_active()) {
+                std::cout << Game::enemy.get_name() << " please select the field you want to bomb" << std::endl;
+                on_board = Game::read_bomb_coordinates(_xb, _yb);
+            }
+            else {
+                std::cout << "there is no active player!" << std::endl;
+            }
+            std::cout << "please try again, all values between 1 and " << Game::player.return_board_ref().get_lenght()
+                      << " are valid" << std::endl;
         }
 
-        std::cout << "Now the field should be bombed" << std::endl;
-        Game::player.bomb_enemy_field(Game::enemy.return_board_ref(), xb, yb);
-
-
-        Game::player_print_boards();
-        Game::player_print_ships();
-        //Game::player.print_enemy_field(Game::enemy.return_board_ref());
-
-        Game::player.change_activ_status();
-
-
-        Game::enemy.change_activ_status();
-        std::cout << Game::enemy.get_name() << " please select the field you want to bomb" << std::endl;
-        while(!(Game::read_bomb_coordinates(_xb, _yb))) {
-            std::cout << "Try again:" << std::endl;
+        if(Game::player.get_active()) {
+            Game::player.bomb_enemy_field(Game::enemy.return_board_ref(), xb, yb);
+            Game::player_print_boards();
+            Game::enemy_print_ships();
         }
 
-        Game::enemy.bomb_enemy_field(Game::player.return_board_ref(), xb, yb);
+        else if(Game::enemy.get_active()) {
+            Game::enemy.bomb_enemy_field(Game::player.return_board_ref(), xb, yb);
+            Game::enemy_print_boards();
+            Game::player_print_ships();
+        }
+
+        Game::change_activity_status();
 
 
-        Game::enemy_print_boards();
-        Game::enemy_print_ships();
-        //Game::enemy.print_enemy_field(Game::player.return_board_ref());
-
-        Game::player.change_activ_status();
+        if(Game::player.check_lose()) {
+            std::cout << Game::enemy.get_name() << " has won the game" << std::endl;
+        }
+        else if (Game::enemy.check_lose()) {
+            std::cout << Game::player.get_name() << " has won the game" << std::endl;
+        }
     }
 }
 
 
 /**
  * @brief Game::read_ship_coordinates
- * @param lenght
+ * this is a help function it is used within the game class to read x and y coordinates
+ * for ships of 2 Squaes lenght, it also checks if the coordinates are within board
+ * range. It returns true if they are.
+ *
  * @param _xa
  * @param _ya
  * @param _xe
@@ -373,14 +479,16 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
         legal = true;
     }
 
-    std::cout << legal << std::endl;
     return legal;
 }
 
 
 /**
  * @brief Game::read_ship_coordinates
- * @param lenght
+ * this is a help function it is used within the game class to read x and y coordinates
+ * for ships of 3 Squaes lenght, it also checks if the coordinates are within board
+ * range. It returns true if they are.
+ *
  * @param _xa
  * @param _ya
  * @param _xe
@@ -423,14 +531,16 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
         legal = true;
     }
 
-    std::cout << legal << std::endl;
     return legal;
 }
 
 
 /**
  * @brief Game::read_ship_coordinates
- * @param lenght
+ * this is a help function it is used within the game class to read x and y coordinates
+ * for ships of 4 Squaes lenght, it also checks if the coordinates are within board
+ * range. It returns true if they are.
+ *
  * @param _xa
  * @param _ya
  * @param _xe
@@ -439,7 +549,7 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
  * @param _y3
  * @param _x4
  * @param _y4
- * @return
+ * @return bool legal
  */
 bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &_ye, size_t &_x3, size_t &_y3, size_t &_x4, size_t &_y4) {
     bool legal = false;
@@ -480,14 +590,16 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
         legal = true;
     }
 
-    std::cout << legal << std::endl;
-
     return legal;
 }
 
 
 /**
  * @brief Game::read_ship_coordinates
+ * this is a help function it is used within the game class to read x and y coordinates
+ * for ships of 5 Squaes lenght, it also checks if the coordinates are within board
+ * range. It returns true if they are.
+ *
  * @param lenght
  * @param _xa
  * @param _ya
@@ -499,7 +611,7 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
  * @param _y4
  * @param _x5
  * @param _y5
- * @return
+ * @return bool legal
  */
 bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &_ye, size_t &_x3, size_t &_y3, size_t &_x4, size_t &_y4, size_t &_x5, size_t &_y5) {
     bool legal = false;
@@ -544,13 +656,17 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
       &(_x4 <= 10) & (_y4 <=10) & (_x5 <= 10) & (_y5 <= 10)) {
         legal = true;
     }
-    std::cout << legal << std::endl;
+
     return legal;
 }
 
 
 /**
  * @brief Game::read_bomb_coordinates
+ * this function enables each player to read a x and a y coordinate from
+ * stdin, checks if they are still on the board, if they are this func. will
+ * return true
+ *
  * @param _xb
  * @param _yb
  * @return bool legal
@@ -563,13 +679,12 @@ bool Game::read_bomb_coordinates(size_t &_xb, size_t &_yb) {
     std::cout << "enter the 'y' cordinate:    ";
     std::cin >> _yb;
 
-    std::cout << _xb << "   " << _yb << std::endl;
+    //std::cout << _xb << "   " << _yb << std::endl;
 
     if((_xb <= 10) & (_yb <= 10)) {
         legal = true;
+        std::cout << "on_board should be true by now if 1 -> " << legal << std::endl;
     }
-
-    std::cout << legal << std::endl;
 
     return legal;
 }
@@ -611,6 +726,7 @@ void Game::enemy_print_ships() {
 
 /**
  * @brief Game::player_set_ship_test
+ * a help function that creates the following pattern on player 1's board
  *
  * this is the your board:
  * A B C D E F G H I K
@@ -659,8 +775,10 @@ void Game::player_set_ship_test() {
     Game::player.print_field();
 }
 
+
 /**
  * @brief Game::enemy_set_ship_test
+ * a help function that creates the following pattern on player 2's board
  *
  * this is the your board:
  *  A B C D E F G H I K

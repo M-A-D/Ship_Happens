@@ -74,6 +74,7 @@ Board::Board(size_t _x, size_t _y) {
     Board::widht = _y;
 }
 
+
 /**
  * destructor
  */
@@ -95,6 +96,7 @@ void Board::clear_board() {
         }
     }
 }
+
 
 /**
  * board.init_board() is a posibillity to add flags to costumize the field
@@ -121,16 +123,21 @@ void Board::disable_square(size_t _x, size_t _y) {
     Board::field[_x][_y].set_disabled();
 }
 
+
 /**
  * @brief Board::get_square_empty
- * @param _sq1
- * @param _sq2
- * @param _sq3
- * @param _sq4
- * @param _sq5
+ * this member function returns true if each square* is empty, _sq3, _sq4 and _sq5 are NULL
+ * by default and the function may be called with 2, 3, 4 or 5 Square* yet still returns
+ * true if all the squares are empty.
+ *
+ * @param Square* _sq1
+ * @param Square* _sq2
+ * @param Square* _sq3
+ * @param Square* _sq4
+ * @param Square* _sq5
  * @return bool empty
  */
-bool Board::get_square_empty(Square *_sq1, Square *_sq2, Square *_sq3, Square *_sq4, Square *_sq5) {
+bool Board::get_squares_empty(Square *_sq1, Square *_sq2, Square *_sq3, Square *_sq4, Square *_sq5) {
     bool empty, em3, em4, em5;
 
     empty = (!(_sq1->get_square_set()) & !(_sq2->get_square_set()));
@@ -161,8 +168,12 @@ bool Board::get_square_empty(Square *_sq1, Square *_sq2, Square *_sq3, Square *_
     return empty;
 }
 
+
 /**
- * @brief Board::set_ship
+ * @brief Board::set_ship 1
+ * This member function toggles two squares "set" flags at once and is
+ * used if the you want to set a Submarine to the board
+ *
  * @param _sq1
  * @param _sq2
  */
@@ -171,8 +182,12 @@ void Board::set_ship(Square* _sq1, Square* _sq2) {
     _sq2->set_square();
 }
 
+
 /**
- * @brief Board::set_ship
+ * @brief Board::set_ship 2
+ * This member function toggles thre squares "set" flags at once and is
+ * used to place a Destroyer on the board
+ *
  * @param _sq1
  * @param _sq2
  * @param _sq3
@@ -183,8 +198,12 @@ void Board::set_ship(Square* _sq1, Square* _sq2, Square* _sq3) {
     _sq3->set_square();
 }
 
+
 /**
- * @brief Board::set_ship
+ * @brief Board::set_ship 3
+ * This function toggles four squares "set" flags at once and is used
+ * to place a Battleship on the board
+ *
  * @param _sq1
  * @param _sq2
  * @param _sq3
@@ -197,8 +216,12 @@ void Board::set_ship(Square* _sq1, Square* _sq2, Square* _sq3, Square* _sq4) {
     _sq4->set_square();
 }
 
+
 /**
  * @brief Board::set_ship
+ * This function toggles five squares "set" flags at once and is used
+ * to place an air carrier on the board
+ *
  * @param _sq1
  * @param _sq2
  * @param _sq3
@@ -224,22 +247,58 @@ void Board::set_ship(Square* _sq1, Square* _sq2, Square* _sq3, Square* _sq4, Squ
 
 
 /**
+ * @brief Board::get_Square_ptr
+ * This Board member function the x and y parameter are used to get the
+ * adress of a single field starting with Sq(1,1) in the top left corner.
+ *
+ * @param size_t _x
+ * @param size_t _y
+ * @return Square* _sq
+ */
+Square* Board::get_Square_ptr(size_t _x, size_t _y) {
+    return &(Board::field[_x-1][_y-1]);
+}
+
+
+/**
+ * @brief Board::get_lenght
+ * @return size_t Board::lenght
+ *
+ * simple getter function that returns the boards lenght (the number of collumns)
+ */
+size_t Board::get_lenght() {
+    return Board::lenght;
+}
+
+
+/**
  * @brief Board::hit_square
+ * The hit square function checks if the square is disabled or has already been hit
+ * otherwise it will toggle the square hit field.
+ *
  * @param _sq
- * @return
+ * @return bool legal
  */
 bool Board::hit_square(Square* _sq) {
-   // if the square is disabled one should not be able to hit it
+   /**
+    * if the square is disabled one should not be able to hit it
+    */
    if(_sq->get_square_disabled()) {
        std::cout << "This field is disabled!" << std::endl;
        return false;
    }
-   // square already hit, exception needed
+
+   /**
+    * square already hit, exception needed
+    */
    else if(_sq->get_square_hit()) {
        std::cout << "You already bombed this sector!" << std::endl;
        return false;
    }
-   // toggle square.hit flag
+
+   /**
+    * toggle square.hit flag
+    */
    else {
        _sq->set_hit();
        return true;
@@ -253,8 +312,9 @@ bool Board::hit_square(Square* _sq) {
 
 
 /**
- * board.draw_board() is a help function for console testing purposes
- * it displays each set field with a 'X' and each free field with 'O'
+ * @brief Board::print_own_board
+ * A help function for terminal testing purposes
+ * it displays each set field with a 'X' and each free field with ' '
  */
 void Board::print_own_board() {
     std::cout << "this is the your board:\n" << " A B C D E F G H I K" << std::endl;
@@ -274,8 +334,10 @@ void Board::print_own_board() {
 
 
 /**
- * board.show_board() is a help function for console testing purposes
- * it shows each hit field with a 'X' and those who are not with an 'O'
+ * @brief Board::print_enemy_board
+ * A help function for terminal testing purposes
+ * for each hit and set square 'X', each hit and not set square 'o' and ' ' for all
+ * empty squares.
  */
 void Board::print_enemy_board() {
     std::cout << "this is the enemies board:\n" << " A B C D E F G H I K" << std::endl;
@@ -299,22 +361,9 @@ void Board::print_enemy_board() {
 
 
 /**
- * Get the adress of a specific Square in the Board.
- * in this Board member func. the x and y parameter are used to get the
- * adress of a single field starting with Sq(1,1) in the top left corner.
- *
- * @param size_t _x
- * @param size_t _y
- * @return Square* Board::field[_x][_y]
- */
-Square* Board::get_Square_ptr(size_t _x, size_t _y) {
-    return &(Board::field[_x-1][_y-1]);
-}
-
-
-/**
- * set a square hit.
- * board.hit_square() enables you to bomb a single square using the
+ * @brief Board::hit_square
+ * A help function for terminal testing purposes
+ * This function enables you to bomb a single square using the
  * boards x and y parameter, if the hit flag could be toggled to
  * true the func. will return true as well.
  *
@@ -322,19 +371,26 @@ Square* Board::get_Square_ptr(size_t _x, size_t _y) {
  * @param size_t _y
  */
 bool Board::hit_square(size_t _x, size_t _y) {
-    // if the square is disabled one should not be able to hit it
+
+    /**
+     * if the square is disabled one should not be able to hit it
+     */
     if(Board::field[_x-1][_y-1].get_square_disabled()) {
         std::cout << "This field is disabled!" << std::endl;
         return false;
     }
 
-    // square already hit, exception needed
+    /**
+     * square already hit, exception needed
+     */
     else if(Board::field[_x-1][_y-1].get_square_hit()) {
         std::cout << "You already bombed this sector!" << std::endl;
         return false;
     }
 
-    // toggle square.hit flag
+    /**
+     * toggle square.hit flag
+     */
     else {
         Board::field[_x-1][_y-1].set_hit();
         return true;
@@ -343,7 +399,11 @@ bool Board::hit_square(size_t _x, size_t _y) {
 
 
 /**
- * board.set_ship(x1,y1,x2,y2) to set a ship of lenght 2
+ * @brief Board::set_ship 4
+ * A help function for terminal debugging purposes
+ * This function may be used to toggle two squares 'hit' flags at once it use it
+ * to set a submarine on the board
+ *
  * @param size_t _x1
  * @param size_t _y1
  * @param size_t _x2
@@ -356,7 +416,11 @@ bool Board::hit_square(size_t _x, size_t _y) {
 
 
 /**
- * board.set_ship(x1,y1,x2,y2,x3,y3) to set a ship of lenght 3
+ * @brief Board::set_ship 5
+ * A help function for terminal debugging purposes
+ * This function may be used to toggle thre squares 'hit' flags at once use it
+ * to set a destroyer on the board
+ *
  * @param size_t _x1
  * @param size_t _y1
  * @param size_t _x2
@@ -372,7 +436,11 @@ void Board::set_ship(size_t _x1, size_t _y1, size_t _x2, size_t _y2, size_t _x3,
 
 
 /**
- * board.set_ship(x1,y1,x2,y2,x3,y3,x4,y4) to set a ship of lenght 4
+ * @brief Board::set_ship 6
+ * A help function for terminal debugging purposes
+ * This function enables you to toggle four squares 'hit' flags at once using the boards x and y
+ * parameter. Use it to set a battleship on the board
+ *
  * @param size_t _x1
  * @param size_t _y1
  * @param size_t _x2
@@ -390,7 +458,11 @@ void Board::set_ship(size_t _x1, size_t _y1, size_t _x2, size_t _y2, size_t _x3,
 
 
 /**
- * board.set_ship(x1,y1,x2,y2,x3,y3,x4,y4,x5,y5) to set a ship of lenght 5
+ * @brief Board::set_ship 7
+ * A help function for terminal debugging purposes
+ * This function enables you to toggle five squares 'hit' flags at once using the boards x and y
+ * parameter. It is used to place an air carrier on the board.
+ *
  * @param size_t _x1
  * @param size_t _y1
  * @param size_t _x2
