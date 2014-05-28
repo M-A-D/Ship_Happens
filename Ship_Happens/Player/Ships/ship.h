@@ -4,19 +4,33 @@
  * Matthias Pfitzmayer		140404		madmayer@gmx.net							*
  ************************************************************************************/
 
- /***********************************************************************************
-  * Changelog:
-  * 140501  MP  @all    Definition of the Ship Class
-  *
-  *
-  ***********************************************************************************/
+/***********************************************************************************
+ * Changelog:
+ * 140501  MP  @all    Definition of the Ship Class
+ *
+ *
+ ***********************************************************************************/
 
- # ifndef SHIP_H
- # define SHIP_H
+# ifndef SHIP_H
+# define SHIP_H
 
- # include "my_headers.h"
- # include "Player/square.h"
+# include "my_headers.h"
+# include "Player/square.h"
 
+# ifndef SHIPS
+# define SHIPS
+
+typedef
+enum {
+
+    Ship_t = 0,
+    Submarine_t = 1,
+    Destroyer_t = 2,
+    Battleship_t = 3,
+    AirCarrier_t = 4
+} Ship_Type;
+
+# endif //SHIPS
 
 /**
  * @brief The Ship class
@@ -36,7 +50,7 @@
                                           squares left that have not been hit yet*/
      bool set;                       /**< the set flag indicates if the ship
                                           has been set on the board*/
-     static size_t const type = 0;   /**< the type is just an id that can be used
+     static size_t const type = Ship_t;   /**< the type is just an id that can be used
                                           to get a ships type 0 = ship*/
      static size_t const lenght = 2; /**< the lenght of each ship is meassured in
                                           Squares it takes on the field*/

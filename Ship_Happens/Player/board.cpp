@@ -1,5 +1,5 @@
-/************************************************************************************
- * board.cpp 	v0.2																*
+/** *********************************************************************************
+ * board.cpp 	v0.1																*
  * Contains the definition of the members and member functions of the Board class. 	*
  * A board consists of a definit number of Squares organized in a field of 			*
  * [x] * [y] tiles. Each of this squares can be manipulated with the Square member 	*
@@ -38,7 +38,7 @@
   * 140404	MP	@all	Created std. logic and func.
   * 140501  MP  @draw_board     changed notation
   * 140501  MP  @clear_board    changed notation
-  * 140501  MP  @
+  * 140528  MP  @get_neighbours_empty   quick and easy expansion of Board::get_squares_empty
   *
   ***********************************************************************************/
 
@@ -121,6 +121,14 @@ void Board::disable_square(size_t _x, size_t _y) {
     _x = _x-1;
     _y = _y-1;
     Board::field[_x][_y].set_disabled();
+}
+
+
+
+Square* Board::get_next(Square *_sq) {
+    Square* next_sq = _sq + 1;
+
+    return next_sq;
 }
 
 

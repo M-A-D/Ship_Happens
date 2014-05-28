@@ -49,6 +49,7 @@ public:
                           Square* _sq5 = NULL);
 
     Square* get_Square_ptr(size_t _x, size_t _y);
+    Square* get_next(Square* _sq);
     size_t get_lenght();
 
     // differnt functions for different ship_lenghts

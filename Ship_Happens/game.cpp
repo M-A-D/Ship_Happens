@@ -177,8 +177,17 @@ void Game::player_set_ship_routine() {
         Submarine& subm_ref = Game::player.get_Submarine_ref(count);
         while(!(subm_ref.get_ship_set())) {
             bool legal = false;
+
             while(!legal) {
+
                 legal = Game::read_ship_coordinates(_xa, _ya, _xe, _ye);
+                if(legal) {
+                    std::cout << "submarine has been placed at : " << _xa << " / " << ya
+                              << "    " << xe << " / " << ye << std::endl;
+                }
+                else {
+                    std::cout << "your coordinates were off the board, try again. " << std::endl;
+                }
             }
 
             _sq1 = field.get_Square_ptr(xa, ya);
@@ -200,7 +209,20 @@ void Game::player_set_ship_routine() {
     for(size_t count = 1; count <= Game::player.get_num_destroyer(); count++) {
         Destroyer& dest_ref = Game::player.get_Destroyer_ref(count);
         while(!(dest_ref.get_ship_set())) {
-            Game::read_ship_coordinates(_xa, _ya, _xe, _ye, _x3, _y3);
+            bool legal = false;
+
+            while(!legal) {
+                legal = Game::read_ship_coordinates(_xa, _ya, _xe, _ye, _x3, _y3);
+                if(legal) {
+                    std::cout << "destroyer has been placed at : " << _xa << " / " << ya
+                              << "    " << _x3 << " / " << _y3 << "    " <<xe << " / " <<
+                           ye << std::endl;
+                }
+                else {
+                    std::cout << "your coordinates were off the board, try again. " << std::endl;
+                }
+            }
+
 
             _sq1 = field.get_Square_ptr(xa, ya);
             _sq2 = field.get_Square_ptr(x3, y3);
@@ -222,7 +244,21 @@ void Game::player_set_ship_routine() {
     for(size_t count = 1; count <= Game::player.get_num_battleships(); count++) {
         Battleship& bash_ref = Game::player.get_BattleShip_ref(count);
         while(!(bash_ref.get_ship_set())) {
-            Game::read_ship_coordinates(_xa, _ya, _xe, _ye, _x3, _y3, _x4, _y4);
+            bool legal = false;
+
+            while(!legal) {
+                legal = Game::read_ship_coordinates(_xa, _ya, _xe, _ye, _x3, _y3, _x4, _y4);
+
+                if(legal) {
+                    std::cout << "battleship has been placed at : " << _xa << " / " << ya
+                              << "    " << _x3 << " / " << _y3 << "    " << _x4 << " / " <<
+                          _y4 << "    " << _xe << " / " << _ye << std::endl;
+                }
+                else {
+                    std::cout << "your coordinates were off the board, try again. " << std::endl;
+                }
+            }
+
             _sq1 = field.get_Square_ptr(xa, ya);
             _sq2 = field.get_Square_ptr(x3, y3);
             _sq3 = field.get_Square_ptr(x4, y4);
@@ -245,7 +281,21 @@ void Game::player_set_ship_routine() {
     for(size_t count = 1; count <= Game::player.get_num_aircarrier(); count++) {
         AirCarrier& airc_ref = Game::player.get_AirCarrier_ref(count);
         while(!(airc_ref.get_ship_set())) {
-            Game::read_ship_coordinates(_xa, _ya, _xe, _ye, _x3, _y3, _x4, _y4, _x5, _y5);
+            bool legal = false;
+            while(!legal) {
+                legal = Game::read_ship_coordinates(_xa, _ya, _xe, _ye, _x3, _y3, _x4, _y4, _x5, _y5);
+
+                if(legal) {
+                    std::cout << "battleship has been placed at : " << _xa << " / " << ya
+                              << "    " << _x3 << " / " << _y3 << "    " << _x4 << " / " <<
+                          _y4 << "    " << _x5 << " / " << _y5 << "    " << _xe << " / " <<
+                          _ye << std::endl;
+                }
+                else {
+                    std::cout << "your coordinates were off the board, try again. " << std::endl;
+                }
+            }
+
             _sq1 = field.get_Square_ptr(xa, ya);
             _sq2 = field.get_Square_ptr(x3, y3);
             _sq3 = field.get_Square_ptr(x4, y4);
@@ -291,9 +341,19 @@ void Game::enemy_set_ship_routine() {
     for(size_t count = 1; count <= Game::enemy.get_num_submarines(); count++) {
         Submarine& subm_ref = Game::enemy.get_Submarine_ref(count);
         while(!(subm_ref.get_ship_set())) {
+            bool legal = false;
 
-            while(!(Game::read_ship_coordinates(_xa, _ya, _xe, _ye))) {
-                std::cout << "try again:" << std::endl;
+            while(!legal) {
+                legal = Game::read_ship_coordinates(_xa, _ya, _xe, _ye);
+
+                if(legal) {
+                    std::cout << "submarine has been placed at : " << _xa << " / " << ya
+                              << "    " << xe << " / " << ye << std::endl;
+                }
+
+                else {
+                    std::cout << "your coordinates were off the board, try again. " << std::endl;
+                }
             }
 
             _sq1 = field.get_Square_ptr(xa, ya);
@@ -310,9 +370,20 @@ void Game::enemy_set_ship_routine() {
     for(size_t count = 1; count <= Game::enemy.get_num_destroyer(); count++) {
         Destroyer& dest_ref = Game::enemy.get_Destroyer_ref(count);
         while(!(dest_ref.get_ship_set())) {
+            bool legal = false;
 
-            while(!(Game::read_ship_coordinates(_xa, _ya, _xe, _ye, _x3, _y3))) {
-                std::cout << "try again:" << std::endl;
+            while(!legal) {
+                legal = Game::read_ship_coordinates(_xa, _ya, _xe, _ye, _x3, _y3);
+
+                if(legal) {
+                    std::cout << "destroyer has been placed at : " << _xa << " / " << ya
+                              << "    " << _x3 << " / " << _y3 << "    " <<xe << " / " <<
+                           ye << std::endl;
+                }
+
+                else {
+                    std::cout << "your coordinates were off the board, try again. " << std::endl;
+                }
             }
 
             _sq1 = field.get_Square_ptr(xa, ya);
@@ -330,11 +401,21 @@ void Game::enemy_set_ship_routine() {
     for(size_t count = 1; count <= Game::enemy.get_num_battleships(); count++) {
         Battleship& bash_ref = Game::enemy.get_BattleShip_ref(count);
         while(!(bash_ref.get_ship_set())) {
+            bool legal = false;
 
-            while(!(Game::read_ship_coordinates(_xa, _ya, _xe, _ye, _x3, _y3, _x4, _y4))) {
-                std::cout << "try again:" << std::endl;
+            while(!legal) {
+                legal = Game::read_ship_coordinates(_xa, _ya, _xe, _ye, _x3, _y3, _x4, _y4);
+
+                if(legal) {
+                    std::cout << "battleship has been placed at : " << _xa << " / " << ya
+                              << "    " << _x3 << " / " << _y3 << "    " << _x4 << " / " <<
+                          _y4 << "    " << _xe << " / " << _ye << std::endl;
+                }
+
+                else {
+                    std::cout << "your coordinates were off the board, try again. " << std::endl;
+                }
             }
-
             _sq1 = field.get_Square_ptr(xa, ya);
             _sq2 = field.get_Square_ptr(x3, y3);
             _sq3 = field.get_Square_ptr(x4, y4);
@@ -352,9 +433,21 @@ void Game::enemy_set_ship_routine() {
     for(size_t count = 1; count <= Game::enemy.get_num_aircarrier(); count++) {
         AirCarrier& airc_ref = Game::enemy.get_AirCarrier_ref(count);
         while(!(airc_ref.get_ship_set())) {
+            bool legal = false;
 
-            while(!(Game::read_ship_coordinates(_xa, _ya, _xe, _ye, _x3, _y3, _x4, _y4, _x5, _y5))) {
-                std::cout << "try again:" << std::endl;
+            while(!legal) {
+                legal = Game::read_ship_coordinates(_xa, _ya, _xe, _ye, _x3, _y3, _x4, _y4, _x5, _y5);
+
+                if(legal) {
+                    std::cout << "battleship has been placed at : " << _xa << " / " << ya
+                              << "    " << _x3 << " / " << _y3 << "    " << _x4 << " / " <<
+                          _y4 << "    " << _x5 << " / " << _y5 << "    " << _xe << " / " <<
+                          _ye << std::endl;
+                }
+
+                else {
+                    std::cout << "your coordinates were off the board, try again. " << std::endl;
+                }
             }
 
             _sq1 = field.get_Square_ptr(xa, ya);
@@ -387,7 +480,7 @@ void Game::bomb_field_routine() {
 
      Game::player.set_active();
 
-    while(!(Game::player.check_lose()) & !(Game::enemy.check_lose())) {
+    while(!(Game::player.get_lost()) & !(Game::enemy.get_lost())) {
         bool on_board = false;
 
         while(! on_board) {
@@ -422,10 +515,10 @@ void Game::bomb_field_routine() {
         Game::change_activity_status();
 
 
-        if(Game::player.check_lose()) {
+        if(Game::player.get_lost()) {
             std::cout << Game::enemy.get_name() << " has won the game" << std::endl;
         }
-        else if (Game::enemy.check_lose()) {
+        else if (Game::enemy.get_lost()) {
             std::cout << Game::player.get_name() << " has won the game" << std::endl;
         }
     }
@@ -460,18 +553,18 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
     std::cin >> _ye;
 
     if(_xe == _xa) {
-        std::cout << "vertically" << std::endl;
+        //std::cout << "vertically" << std::endl;
         _ye = (_ya + 1);
 
     }
 
     else if(_ye == _ya) {
-        std::cout << "horizontally" << std::endl;
+        //std::cout << "horizontally" << std::endl;
         _xe = (_xa + 1);
     }
 
     else {
-        std::cout << "Ship must be set vertically" << std::endl;
+        //std::cout << "Ship must be set vertically" << std::endl;
         return legal;
     }
 
@@ -486,8 +579,8 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
 /**
  * @brief Game::read_ship_coordinates
  * this is a help function it is used within the game class to read x and y coordinates
- * for ships of 3 Squaes lenght, it also checks if the coordinates are within board
- * range. It returns true if they are.
+ * for ships of 3 Squaes lenght from stdin, it also checks if the coordinates are within
+ * board range. It returns true if they are.
  *
  * @param _xa
  * @param _ya
@@ -513,7 +606,7 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
     std::cin >> _ye;
 
     if(_xe == _xa) {
-        std::cout << "vertically" << std::endl;
+        //std::cout << "vertically" << std::endl;
         _x3 = _xa;
 
         _ye = (_ya + 2);
@@ -521,7 +614,7 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
     }
 
     if(_ye == _ya) {
-        std::cout << "horizontally" << std::endl;
+        //std::cout << "horizontally" << std::endl;
         _y3 = _ya;
 
         _xe = (_xa + 2);
@@ -567,7 +660,7 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
     std::cin >> _ye;
 
     if(_xe == _xa) {
-        std::cout << "vertically" << std::endl;
+        //std::cout << "vertically" << std::endl;
         _x3 = _xa;
         _x4 = _xa;
 
@@ -577,7 +670,7 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
     }
 
     if(_ye == _ya) {
-        std::cout << "horizontally" << std::endl;
+        //std::cout << "horizontally" << std::endl;
         _y3 = _ya;
         _y4 = _ya;
 
@@ -629,7 +722,7 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
     std::cin >> _ye;
 
     if(_xe == _xa) {
-        std::cout << "vertically" << std::endl;
+        //std::cout << "vertically" << std::endl;
         _x3 = _xa;
         _x4 = _xa;
         _x5 = _xa;
@@ -641,7 +734,7 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
     }
 
     if(_ye == _ya) {
-        std::cout << "horizontally" << std::endl;
+        //std::cout << "horizontally" << std::endl;
         _y3 = _ya;
         _y4 = _ya;
         _y5 = _ya;
