@@ -20,24 +20,38 @@
 
 /**
  * @brief The Destroyer class
+ * The Destroyer class is a subclass of ship with the same members and member
+ * functions with the lenght of 3 squares.
+ *
+ * @author m-a-d
+ * @version 0.1
  */
 class Destroyer : public virtual Ship {
 private:
-    bool alive;                     /**< indicates if the ship already sunk*/
-    bool set;                       /**< indicates if the ship has already been placed on the field*/
-    static size_t const type = 2;   /**< */
-    static size_t const lenght = 3; /**< the lenght of a ship meassured in squares*/
-    Square* position[lenght];       /**< an array of pointers to the squares the ship has been placed on*/
+    bool alive;                     /**< the alive flag indicates if the destroyer
+                                         has squares left that have not been hit yet*/
+    bool set;                       /**< the set flag indicates if the destroyer
+                                         has been set on the board*/
+    static size_t const type = 2;   /**< the type is just an id that can be used
+                                         to get a ships type 2 = destroyer*/
+    static size_t const lenght = 3; /**< the lenght of each ship is meassured in
+                                         Squares it takes on the field*/
+    Square* position[lenght];       /**< the position array holds pointer to the
+                                         boards squares, the ship has been placed on*/
 
 public:
     Destroyer();
     ~Destroyer();
 
     size_t get_lenght();
+    size_t get_type();
+
     bool get_ship_set();
     bool get_ship_alive();
+
     void display_ship();
     void check_ship_stat();
+
     void set_ship(Square* _sq1, Square* _sq2, Square* _sq3);
     void reset_ship();
 

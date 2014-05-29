@@ -1,5 +1,5 @@
 /************************************************************************************
- * player.cpp	v0.3																*
+ * player.cpp	v0.1																*
  * Contains the definition of the member and member functions of the player class.	*
  * A Player should be able to set and change his name, set ships and bomb the 		*
  * enemies field 																	*
@@ -12,12 +12,13 @@
   * Changelog:
   * 140415	MP	@all	Definition of the Player class
   * 140416	MP	@all	Implementing Memberfunc of th Player class
+  * 140527  MP  @all    Add doxygen comments, cleanup the file
   *
   ***********************************************************************************/
 
  /***********************************************************************************
   * to do:
-  * [1]	MP	implement the player.set_ship(_len, _x1, _y1, _x2, _y2)
+  *
   *
   *
   ***********************************************************************************/
@@ -66,6 +67,7 @@ Player::~Player() {
 /**
  * @brief Player::set_name
  * @param std::string _name
+ * simple set function replaces player.name with the string _name
  */
 void Player::set_name(std::string _name) {
     Player::name = _name;
@@ -84,47 +86,67 @@ std::string Player::get_name() {
 
 /**
  * @brief Player::check_lose
- * @return bool Player::lost;
+ * this function counts the ships that have been destroyed, by itteration over
+ * all ship arrays by calling the Ship::get_alive() function. Afterwards the
+ * number will be compared with the number of ships a player have. If it is
+ * equal there is no ship left and the Player::lost will be set true.
+ * @return bool Player::lost
  */
 bool Player::check_lose() {
 
     size_t dest_ship_counter;
 
+    /**
+     * itterate over the submarine array
+     */
     for(size_t count = 0; count < Player::num_subm; count ++) {
         Submarine &subm_ref = Player::subm[count];
 
         if(!(subm_ref.get_ship_alive())) {
             dest_ship_counter++;
-            std::cout << dest_ship_counter << std::endl;
+            //std::cout << dest_ship_counter << std::endl;
         }
     }
 
+    /**
+     * itterate over the destroyer array and
+     */
     for(size_t count = 0; count < Player::num_dest; count ++) {
         Destroyer& dest_ref = Player::dest[count];
         if(!(dest_ref.get_ship_alive())) {
             dest_ship_counter ++;
-            std::cout << dest_ship_counter << std::endl;
+            //std::cout << dest_ship_counter << std::endl;
         }
     }
 
+    /**
+     * itterate over the battleship array
+     */
     for(size_t count = 0; count < Player::num_bash; count ++) {
         Battleship& bash_ref = Player::bash[count];
 
         if(!(bash_ref.get_ship_alive())) {
             dest_ship_counter ++;
-            std::cout << dest_ship_counter << std::endl;
+            //std::cout << dest_ship_counter << std::endl;
         }
     }
 
+    /**
+     * itterate over the air carrier array
+     */
     for(size_t count = 0; count < Player::get_num_aircarrier(); count++) {
         AirCarrier& airc_ref = Player::airc[count];
 
         if(!(airc_ref.get_ship_alive())) {
             dest_ship_counter ++;
-            std::cout << dest_ship_counter << std::endl;
+            //std::cout << dest_ship_counter << std::endl;
         }
     }
 
+    /**
+     * compare the counter variable with the nuber of ships if it is equal
+     * the bool Player::lost will be set true and the game should end
+     */
     if(dest_ship_counter == (Player::num_subm + Player::num_dest + Player::num_bash + Player::num_airc)) {
         Player::lost = true;
         std::cout << "All ships were destroyed" << std::endl;
@@ -182,6 +204,7 @@ Destroyer& Player::get_Destroyer_ref(size_t _num) {
 /**
  * @brief Player::get_num_destroyer
  * @return size_t Player::num_dest
+ * simple geter function returning the amount of destroyer
  */
 size_t Player::get_num_destroyer() {
     return Player::num_dest;
@@ -203,6 +226,7 @@ Battleship& Player::get_BattleShip_ref(size_t _num) {
 /**
  * @brief Player::get_num_battleships
  * @return size_t Player::num_bash
+ * simple geter function returning the amount of battleships
  */
 size_t Player::get_num_battleships() {
     return Player::num_bash;
@@ -225,6 +249,7 @@ AirCarrier& Player::get_AirCarrier_ref(size_t _num) {
 /**
  * @brief Player::get_num_aircarrier
  * @return size_t Player::num_airc
+ * simple geter function returning the number of air carriers
  */
 size_t Player::get_num_aircarrier() {
     return Player::num_airc;
@@ -243,7 +268,7 @@ size_t Player::get_num_aircarrier() {
 bool Player::place_ship(Square *_sq1, Square *_sq2, Square *_sq3, Square *_sq4, Square *_sq5) {
     bool empty;
 
-    empty = Player::own_field.get_square_empty(_sq1, _sq2, _sq3, _sq4, _sq5);
+    empty = Player::own_field.get_squares_empty(_sq1, _sq2, _sq3, _sq4, _sq5);
 
     if(empty) {
         Player::own_field.set_ship(_sq1, _sq2, _sq3, _sq4, _sq5);
@@ -263,24 +288,62 @@ bool Player::bomb_enemy_field(Board& _en_field, size_t _x, size_t _y) {
     Square* _sq = _en_field.get_Square_ptr(_x, _y);
     bool free = false;
 
-    std::cout << "Now we should hit the field" << std::endl;
-    std::cout << _sq->get_square_hit() << std::endl;
-
     if(!(_sq->get_square_hit())) {
         free = true;
         _sq->set_hit();
     }
-    std::cout << free << std::endl;
     return free;
 }
 
 
 /**
  * @brief Player::change_activ_status
+ * @see Player::check_ships
+ * @see Player::check_lose
+ *
  */
 void Player::change_activ_status() {
     Player::check_ships();
+    Player::check_lose();
     Player::active = !(Player::active);
+}
+
+
+/**
+ * @brief Player::set_active
+ */
+void Player::set_active() {
+    Player::check_ships();
+    Player::check_lose();
+    Player::active = true;
+}
+
+
+/**
+ * @brief Player::set_not_active
+ */
+void Player::set_not_active() {
+    Player::active = false;
+}
+
+
+/**
+ * @brief Player::get_active
+ * @return Player::active
+ */
+bool Player::get_active() {
+    return Player::active;
+}
+
+
+/**
+ * @brief Player::get_lost
+ * @return Player::lost
+ * a simple geter function returning the players "lost" flag if true is returned
+ * the game should end.
+ */
+bool Player::get_lost() {
+    return Player::lost;
 }
 
 
@@ -411,7 +474,7 @@ bool Player::place_ship(size_t _type, size_t _num, size_t _x1, size_t _y1, size_
 
     // type 1 = submarine -> lenght = 2
     case 1:
-        if(Player::own_field.get_square_empty(_sq1, _sq2)) {
+        if(Player::own_field.get_squares_empty(_sq1, _sq2)) {
             Player::own_field.set_ship(_x1, _y1, _x2, _y2);
             Player::subm[_num - 1].set_ship(Player::own_field.get_Square_ptr(_x1, _y1),
                                             Player::own_field.get_Square_ptr(_x2, _y2));
@@ -421,7 +484,7 @@ bool Player::place_ship(size_t _type, size_t _num, size_t _x1, size_t _y1, size_
 
     // type 2 = destroyer -> lenght = 3
     case 2:
-        if(Player::own_field.get_square_empty(_sq1, _sq2, _sq3)) {
+        if(Player::own_field.get_squares_empty(_sq1, _sq2, _sq3)) {
             Player::dest[_num - 1].set_ship(Player::own_field.get_Square_ptr(_x1, _y1),
                                             Player::own_field.get_Square_ptr(_x2, _y2),
                                             Player::own_field.get_Square_ptr(_x3, _y3));
@@ -432,7 +495,7 @@ bool Player::place_ship(size_t _type, size_t _num, size_t _x1, size_t _y1, size_
 
      // type 3 = battleship -> lenght = 4
      case 3:
-        if(Player::own_field.get_square_empty(_sq1, _sq2, _sq3, _sq4)) {
+        if(Player::own_field.get_squares_empty(_sq1, _sq2, _sq3, _sq4)) {
             Player::bash[_num -1].set_ship(Player::own_field.get_Square_ptr(_x1, _y1),
                                            Player::own_field.get_Square_ptr(_x2, _y2),
                                            Player::own_field.get_Square_ptr(_x3, _y3),
@@ -444,7 +507,7 @@ bool Player::place_ship(size_t _type, size_t _num, size_t _x1, size_t _y1, size_
 
     // type 4 = air carrier -> lenght = 5
     case 4:
-        if(Player::own_field.get_square_empty(_sq1, _sq2, _sq3, _sq4, _sq5)) {
+        if(Player::own_field.get_squares_empty(_sq1, _sq2, _sq3, _sq4, _sq5)) {
             Player::airc[_num - 1].set_ship(Player::own_field.get_Square_ptr(_x1, _y1),
                                             Player::own_field.get_Square_ptr(_x2, _y2),
                                             Player::own_field.get_Square_ptr(_x3, _y3),

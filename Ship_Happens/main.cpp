@@ -35,6 +35,9 @@ int main () {
 
     //game.enemy_set_ship_routine();
 
+    // use test ot routine
+    // the test set ships to specified squares
+
     game.player_set_ship_test();
 
     game.enemy_set_ship_test();

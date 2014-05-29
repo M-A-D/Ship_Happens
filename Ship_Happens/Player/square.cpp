@@ -14,6 +14,7 @@
 
 # include "square.h"
 
+
 /**
  * @brief Square::Square
  * std constructor.
@@ -27,6 +28,7 @@ Square::Square() {
     Square::hit = false;
     Square::disabled = false;
 }
+
 
 /**
  * @brief Square::Square
@@ -42,6 +44,7 @@ Square::Square(bool _set,bool _hit,bool _disabled) {
     Square::disabled = _disabled;
 }
 
+
 /**
  * @brief Square::~Square
  * destructor
@@ -49,6 +52,7 @@ Square::Square(bool _set,bool _hit,bool _disabled) {
 Square::~Square() {
 
 }
+
 
 /**
  * @brief Square::set_square
@@ -71,6 +75,7 @@ bool Square::set_square() {
     return false;
 }
 
+
 /**
  * @brief Square::un_set_square
  * removes set flag from the square.
@@ -80,6 +85,7 @@ bool Square::set_square() {
 void Square::un_set_square() {
     Square::set = false;
 }
+
 
 /**
  * @brief Square::get_square_set
@@ -99,8 +105,7 @@ bool Square::get_square_set() {
  * if a square got thit the member Square::hit will be set true
  */
 void Square::set_hit() {
-    std::cout << "Well at least we get to setting the ship" << std::endl;
-    if(Square::legal()) {
+    if(!(Square::disabled)) {
             Square::hit = true;
     }
 }

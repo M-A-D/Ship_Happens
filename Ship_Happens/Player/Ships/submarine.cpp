@@ -1,5 +1,5 @@
 /************************************************************************************
- * submarine.cpp     v0.5															*
+ * submarine.cpp     v0.1															*
  * Contains the members and memberfunctions of the submarine class, a subclass of   *
  * the ship class. The main difference between each kind of ship in this game is    *
  * the lenght and a submarine is a ship with 2 squares lenght.                      *
@@ -49,6 +49,13 @@ size_t Submarine::get_lenght() {
     return Submarine::lenght;
 }
 
+
+
+size_t Submarine::get_type() {
+    return Submarine::type;
+}
+
+
 /**
  * @brief Submarine::get_ship_set
  * @return
@@ -85,6 +92,7 @@ void Submarine::check_ship_stat() {
      * destroyed, the flag Ship::alive will be set to false
      */
      if (comp == (Submarine::lenght)) {
+         std::cout << "submarine has been destroyed" << std::endl;
          Submarine::alive = false;
      }
 }
