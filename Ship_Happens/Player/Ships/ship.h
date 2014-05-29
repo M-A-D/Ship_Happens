@@ -17,6 +17,23 @@
  # include "my_headers.h"
  # include "Player/square.h"
 
+<<<<<<< Updated upstream
+=======
+# ifndef SHIPS
+# define SHIPS
+
+typedef
+enum {
+
+    Ship_t = 0,
+    Submarine_t  = 1,
+    Destroyer_t  = 2,
+    Battleship_t = 3,
+    AirCarrier_t = 4
+} Ship_Type;
+
+# endif //SHIPS
+>>>>>>> Stashed changes
 
 /**
   * @brief The Ship class
