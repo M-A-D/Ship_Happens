@@ -17,8 +17,8 @@
 # include "my_headers.h"
 # include "Player/square.h"
 
-# ifndef SHIPS
-# define SHIPS
+# ifndef SHIP_TYPE
+# define SHIP_TYPE
 
 typedef
 enum {
@@ -30,7 +30,7 @@ enum {
     AirCarrier_t = 4
 } Ship_Type;
 
-# endif //SHIPS
+# endif //SHIP_TYPE
 
 /**
  * @brief The Ship class
@@ -77,8 +77,10 @@ enum {
 
      virtual size_t get_lenght();
 
+# ifndef GRAPHIC
      // help func for terminal testing purposes
      void print_ship();
+# endif // GRAPHIC
  };
 
  # endif // SHIP_H

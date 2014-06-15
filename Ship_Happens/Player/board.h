@@ -35,13 +35,19 @@ private:
     size_t widht;           /**< the number of lines of a board*/
     Square field[10][10];   /**< two dimensional array of Squares [number of collumns][number of lines]*/
 
+protected:
+    Square* get_next(Square* _sq);
+    Square* get_prev(Square* _sq);
+    Square* get_next_collumn(Square* _sq);
+    Square* get_prev_collumn(Square* _sq);
+    bool get_neighbours_empty(Square* _sq);
+
 public:
     Board ();
     Board (size_t _x, size_t _y);
     ~Board ();
 
     void clear_board();
-    bool init_board();
     bool hit_square(Square* _sq);
 
     void disable_square(size_t _x, size_t _y);
@@ -49,7 +55,6 @@ public:
                           Square* _sq5 = NULL);
 
     Square* get_Square_ptr(size_t _x, size_t _y);
-    Square* get_next(Square* _sq);
     size_t get_lenght();
 
     // differnt functions for different ship_lenghts
@@ -61,6 +66,7 @@ public:
 
 
 
+# ifndef GRAPHIC
     // help and test functions for console debugging
     bool hit_square(size_t _x, size_t _y);
     void print_own_board();
@@ -73,6 +79,8 @@ public:
                   size_t _x4, size_t _y4);
     void set_ship(size_t _x1, size_t _y1, size_t _x2, size_t _y2, size_t _x3, size_t _y3,
                   size_t _x4, size_t _y4, size_t _x5, size_t _y5);
+
+# endif // GRAPHIC
 
 };
 

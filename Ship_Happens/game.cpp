@@ -17,7 +17,9 @@
 
  /***********************************************************************************
   * to do:
-  * [1]	MP	implement the player.set_ship(_len, _x1, _y1, _x2, _y2)
+  * [1]	MP	@place_ships()  after the graphic interface is definde we need an option
+  *                         to distinguish between the different types of ships and
+  *                         a function to put them on the board
   *
   *
   ***********************************************************************************/
@@ -56,7 +58,9 @@ void Game::init_game() {
 
 /**
  * @brief Game::change_player_name
- * @param _name
+ * @param std::string _name
+ * a function that enables you to change the name of player 1 from an other
+ * source e.g. from a graphic surface
  */
 void Game::change_player_name(std::string& _name) {
     Game::player.set_name(_name);
@@ -65,7 +69,7 @@ void Game::change_player_name(std::string& _name) {
 
 /**
  * @brief Game::change_enemy_name
- * @param _name
+ * @param std::string _name
  * a function that enables you to change the name of player 2 from an other
  * source e.g. from a graphic surface
  */
@@ -76,7 +80,8 @@ void Game::change_enemy_name(std::string& _name) {
 
 /**
  * @brief get_player_name
- * @return
+ * @return std::string Game::player.name
+ * simple getter function returning the first players name
  */
 std::string Game::get_player_name() {
     return Game::player.get_name();
@@ -85,7 +90,8 @@ std::string Game::get_player_name() {
 
 /**
  * @brief get_enemy_name
- * @return
+ * @return std::string Game::enemy.name
+ * simple getter function returning the second players name
  */
 std::string Game::get_enemy_name() {
     return Game::enemy.get_name();
@@ -135,20 +141,48 @@ bool Game::change_activity_status() {
 
 
 /**
- * @brief Game::set_ship_routine
+ * @brief Game::place_ships
  * defines a prototype routine, that can be used to set a ship from the graphic surface
+ * it at least needs two Squares of the Board and will toggle the set_flags of the Board,
+ * it does fix the ship on the board right now, that should be added soon. [1]
+ *
+ * @param Square* _sq1
+ * @param Square* _sq2
+ * @param Square* _sq3
+ * @param Square* _sq4
+ * @param Square* _sq5
  */
 bool Game::place_ships(Square* _sq1, Square* _sq2, Square* _sq3, Square* _sq4, Square* _sq5) {
-    if(Game::player.return_board_ref().get_squares_empty(_sq1, _sq2, _sq3, _sq4, _sq5)) {
+    bool empty;
+    empty = Game::player.return_board_ref().get_squares_empty(_sq1, _sq2, _sq3, _sq4, _sq5);
+    if(empty) {
         Game::player.place_ship(_sq1, _sq2, _sq3, _sq4, _sq5);
     }
-    return true;
+    return empty;
 }
 
 
 /**
- * @brief Game::set_ship_routine
- *
+ * @brief Game::bomb_square
+ * @param _x
+ * @param _y
+ * this function simply calls the players bomb_enemy_field function with the params
+ * that should be read from the graphic surface the enemys field should start with 1 / 1
+ * in the top left and end with Board::lenght / Board::widht in the bottom right corner.
+ */
+void Game::bomb_square(size_t _x, size_t _y) {
+    Game::player.bomb_enemy_field(Game::enemy.return_board_ref(), _x, _y);
+}
+
+
+/**
+ * @brief Game::player_set_ship_routine
+ * this member function is one of the main functions if you want to play
+ * Ship Happens ! in the terminal mode, it will enable the player to place
+ * his ships on the board, it calls one of the Games read_ship_koordinates
+ * functions and uses a lot of loops untill all ships are placed on the
+ * board.
+ * On a Graphic Surface the ships may be set simultaniously by both players.
  */
 void Game::player_set_ship_routine() {
     Board& field = Game::player.return_board_ref();
@@ -470,8 +504,10 @@ void Game::enemy_set_ship_routine() {
 
 /**
  * @brief Game::bomb_field_routine
- * this member function is another help function for terminal debugging purposes.
- *
+ * this is another main function of the game Ship Happens !
+ * here the battle of the player will be decided, both player will bomb the enemies
+ * field, after each turn the players ships will be checked, if a player has no ships
+ * left he lost the game and in the current version the game will end at that point.
  */
 void Game::bomb_field_routine() {
     size_t xb, yb;
@@ -480,9 +516,19 @@ void Game::bomb_field_routine() {
 
      Game::player.set_active();
 
-    while(!(Game::player.get_lost()) & !(Game::enemy.get_lost())) {
+     /**
+      * while both players still have floating ships left, the function
+      * Game::read_bomb_coordinates will be called in this function koordinates
+      * will be read from stdin.
+      */
+     while(!(Game::player.get_lost()) & !(Game::enemy.get_lost())) {
         bool on_board = false;
 
+        /**
+         * distinguished by the players active flag the function chooses which of the player
+         * should be the one bombing right now, while the parameter are not within the boards
+         * limits it will repeat over and over again.
+         */
         while(! on_board) {
             on_board = false;
             if(Game::player.get_active()) {
@@ -500,16 +546,21 @@ void Game::bomb_field_routine() {
                       << " are valid" << std::endl;
         }
 
+        /**
+         * Now the param will be used to actually bomb the field by calling the players bomb_enemy_field
+         * function, afterwards the Game::change_activity_status is called to enable the next turn of the
+         * other player. The Network sync should be done throughout this phase of the game.
+         */
         if(Game::player.get_active()) {
             Game::player.bomb_enemy_field(Game::enemy.return_board_ref(), xb, yb);
             Game::player_print_boards();
-            Game::enemy_print_ships();
+            //Game::enemy_print_ships();
         }
 
         else if(Game::enemy.get_active()) {
             Game::enemy.bomb_enemy_field(Game::player.return_board_ref(), xb, yb);
             Game::enemy_print_boards();
-            Game::player_print_ships();
+            //Game::player_print_ships();
         }
 
         Game::change_activity_status();
@@ -553,18 +604,24 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
     std::cin >> _ye;
 
     if(_xe == _xa) {
-        //std::cout << "vertically" << std::endl;
+
+        /**
+         *
+         */
         _ye = (_ya + 1);
 
     }
 
     else if(_ye == _ya) {
-        //std::cout << "horizontally" << std::endl;
+
+        /**
+         *
+         */
         _xe = (_xa + 1);
     }
 
     else {
-        //std::cout << "Ship must be set vertically" << std::endl;
+
         return legal;
     }
 
@@ -606,7 +663,10 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
     std::cin >> _ye;
 
     if(_xe == _xa) {
-        //std::cout << "vertically" << std::endl;
+
+        /**
+         *
+         */
         _x3 = _xa;
 
         _ye = (_ya + 2);
@@ -614,12 +674,16 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
     }
 
     if(_ye == _ya) {
-        //std::cout << "horizontally" << std::endl;
+
+        /**
+         *
+         */
         _y3 = _ya;
 
         _xe = (_xa + 2);
         _x3 = (_xa + 1);
     }
+
     if((_xe <= 10)& (_ye <= 10) & (_xa <= 10) & (_ya <= 10) & (_x3 <= 10) & (_y3 <= 10)) {
         legal = true;
     }
@@ -660,7 +724,10 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
     std::cin >> _ye;
 
     if(_xe == _xa) {
-        //std::cout << "vertically" << std::endl;
+
+        /**
+         *
+         */
         _x3 = _xa;
         _x4 = _xa;
 
@@ -670,7 +737,10 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
     }
 
     if(_ye == _ya) {
-        //std::cout << "horizontally" << std::endl;
+
+        /**
+         *
+         */
         _y3 = _ya;
         _y4 = _ya;
 
@@ -678,6 +748,7 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
         _x3 = (_xa + 1);
         _x4 = (_xa + 2);
     }
+
     if((_xe <= 10) & (_ye <= 10) & (_xa <= 10) & (_ya <= 10) & (_x3 <= 10) & (_y3 <= 10)
       &(_x4 <= 10) & (_y4 <=10)) {
         legal = true;
@@ -722,7 +793,10 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
     std::cin >> _ye;
 
     if(_xe == _xa) {
-        //std::cout << "vertically" << std::endl;
+
+        /**
+         *
+         */
         _x3 = _xa;
         _x4 = _xa;
         _x5 = _xa;
@@ -734,7 +808,10 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
     }
 
     if(_ye == _ya) {
-        //std::cout << "horizontally" << std::endl;
+
+        /**
+         *
+         */
         _y3 = _ya;
         _y4 = _ya;
         _y5 = _ya;
@@ -802,6 +879,7 @@ void Game::player_print_ships() {
 
 /**
  * @brief Game::enemy_print_boards
+ * help function for terminal debugging purposes
  */
 void Game::enemy_print_boards() {
     Game::player.print_field();
@@ -811,6 +889,7 @@ void Game::enemy_print_boards() {
 
 /**
  * @brief Game::enemy_print_ships
+ * help function for terminal debuging purposes
  */
 void Game::enemy_print_ships() {
     Game::enemy.print_ships();
@@ -839,31 +918,31 @@ void Game::player_set_ship_test() {
     /**
      * set submarines
      */
-    Game::player.place_ship(1, 1, 1, 1, 1, 2);
-    Game::player.place_ship(1, 2, 1, 4, 1, 5);
-    Game::player.place_ship(1, 3, 1, 7, 1, 8);
-    Game::player.place_ship(1, 4, 1, 10, 2, 10);
-    Game::player.place_ship(1, 5, 3, 1, 4, 1);
+    Game::player.place_ship(Submarine_t, 1, 1, 1, 1, 2);
+    Game::player.place_ship(Submarine_t, 2, 1, 4, 1, 5);
+    Game::player.place_ship(Submarine_t, 3, 1, 7, 1, 8);
+    Game::player.place_ship(Submarine_t, 4, 1, 10, 2, 10);
+    Game::player.place_ship(Submarine_t, 5, 3, 1, 4, 1);
 
     /**
      * set destroyer
      */
-    Game::player.place_ship(2, 1, 3, 3, 3, 4, 3, 5);
-    Game::player.place_ship(2, 2, 3, 7, 3, 8, 3, 9);
-    Game::player.place_ship(2, 3, 7, 1, 8, 1, 9, 1);
-    Game::player.place_ship(2, 4, 5, 10, 6, 10, 7, 10);
+    Game::player.place_ship(Destroyer_t, 1, 3, 3, 3, 4, 3, 5);
+    Game::player.place_ship(Destroyer_t, 2, 3, 7, 3, 8, 3, 9);
+    Game::player.place_ship(Destroyer_t, 3, 7, 1, 8, 1, 9, 1);
+    Game::player.place_ship(Destroyer_t, 4, 5, 10, 6, 10, 7, 10);
 
     /**
      * set all battleships
      */
-    Game::player.place_ship(3, 1, 5, 3, 6, 3, 7, 3, 8, 3);
-    Game::player.place_ship(3, 2, 5, 5, 5, 6, 5, 7, 5, 8);
-    Game::player.place_ship(3, 3, 10, 7, 10, 8, 10, 9, 10, 10);
+    Game::player.place_ship(Battleship_t, 1, 5, 3, 6, 3, 7, 3, 8, 3);
+    Game::player.place_ship(Battleship_t, 2, 5, 5, 5, 6, 5, 7, 5, 8);
+    Game::player.place_ship(Battleship_t, 3, 10, 7, 10, 8, 10, 9, 10, 10);
 
     /**
      * set the air carrier
      */
-    Game::player.place_ship(4, 1, 8, 5, 8, 6, 8, 7, 8, 8, 8, 9);
+    Game::player.place_ship(AirCarrier_t, 1, 8, 5, 8, 6, 8, 7, 8, 8, 8, 9);
 
     Game::player.print_field();
 }
@@ -891,31 +970,31 @@ void Game::enemy_set_ship_test() {
     /**
      * set submarines
      */
-    Game::enemy.place_ship(1, 1, 1, 1, 1, 2);
-    Game::enemy.place_ship(1, 2, 1, 4, 1, 5);
-    Game::enemy.place_ship(1, 3, 1, 7, 1, 8);
-    Game::enemy.place_ship(1, 4, 1, 10, 2, 10);
-    Game::enemy.place_ship(1, 5, 3, 1, 4, 1);
+    Game::enemy.place_ship(Submarine_t, 1, 1, 1, 1, 2);
+    Game::enemy.place_ship(Submarine_t, 2, 1, 4, 1, 5);
+    Game::enemy.place_ship(Submarine_t, 3, 1, 7, 1, 8);
+    Game::enemy.place_ship(Submarine_t, 4, 1, 10, 2, 10);
+    Game::enemy.place_ship(Submarine_t, 5, 3, 1, 4, 1);
 
     /**
      * set destroyer
      */
-    Game::enemy.place_ship(2, 1, 3, 3, 3, 4, 3, 5);
-    Game::enemy.place_ship(2, 2, 3, 7, 3, 8, 3, 9);
-    Game::enemy.place_ship(2, 3, 7, 1, 8, 1, 9, 1);
-    Game::enemy.place_ship(2, 4, 5, 10, 6, 10, 7, 10);
+    Game::enemy.place_ship(Destroyer_t, 1, 3, 3, 3, 4, 3, 5);
+    Game::enemy.place_ship(Destroyer_t, 2, 3, 7, 3, 8, 3, 9);
+    Game::enemy.place_ship(Destroyer_t, 3, 7, 1, 8, 1, 9, 1);
+    Game::enemy.place_ship(Destroyer_t, 4, 5, 10, 6, 10, 7, 10);
 
     /**
      * set all battleships
      */
-    Game::enemy.place_ship(3, 1, 5, 3, 6, 3, 7, 3, 8, 3);
-    Game::enemy.place_ship(3, 2, 5, 5, 5, 6, 5, 7, 5, 8);
-    Game::enemy.place_ship(3, 3, 10, 7, 10, 8, 10, 9, 10, 10);
+    Game::enemy.place_ship(Battleship_t, 1, 5, 3, 6, 3, 7, 3, 8, 3);
+    Game::enemy.place_ship(Battleship_t, 2, 5, 5, 5, 6, 5, 7, 5, 8);
+    Game::enemy.place_ship(Battleship_t, 3, 10, 7, 10, 8, 10, 9, 10, 10);
 
     /**
      * set the air carrier
      */
-    Game::enemy.place_ship(4, 1, 8, 5, 8, 6, 8, 7, 8, 8, 8, 9);
+    Game::enemy.place_ship(AirCarrier_t, 1, 8, 5, 8, 6, 8, 7, 8, 8, 8, 9);
 
     Game::enemy.print_field();
 }

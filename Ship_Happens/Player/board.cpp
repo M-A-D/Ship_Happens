@@ -84,8 +84,9 @@ Board::~Board() {
 
 
 /**
- * board.clear_board() removes all the flags that were previously set
- * in the squares (e.g. "hit", "set", "disabled")
+ * @brief Board::clear_board
+ * removes all the flags that were previously set in the squares
+ * (e.g. "hit", "set", "disabled")
  */
 void Board::clear_board() {
     for(size_t line = 0; line < Board::widht; line++) {
@@ -99,20 +100,11 @@ void Board::clear_board() {
 
 
 /**
- * board.init_board() is a posibillity to add flags to costumize the field
- * (e.g. switch case to decide, where the islands will be set)
- */
-bool Board::init_board() {
-    bool done = true;
-
-    return done;
-}
-
-
-/**
- * Disable a single square.
- * board.disable_square() help function for testing purposes,
- * disables a single square
+ * @brief Board::disable_square
+ * Help function for terminal testing purposes.
+ * disable_square later on may be used to build specific boards, build
+ * islands on the map for example, it just needs a x and y coordinate
+ * and will toggle the disabled flag of the chosen square.
  *
  * @param size_t _x
  * @param size_t _y
@@ -124,11 +116,92 @@ void Board::disable_square(size_t _x, size_t _y) {
 }
 
 
+/**
+ * @brief Board::get_next
+ * @param _sq
+ * @return Square* _sq
+ */
+Square* Board::get_next(Square* _sq) {
+    return ++_sq;
+}
 
-Square* Board::get_next(Square *_sq) {
-    Square* next_sq = _sq + 1;
 
-    return next_sq;
+/**
+ * @brief Board::get_prev
+ * @param _sq
+ * @return Square* _sq
+ */
+Square* Board::get_prev(Square* _sq) {
+    return --_sq;
+}
+
+
+/**
+ * @brief Board::get_next_collumn
+ * @param _sq
+ * @return Square* _sq
+ */
+Square* Board::get_next_collumn(Square* _sq) {
+    return _sq = _sq + Board::lenght;
+}
+
+
+/**
+ * @brief Board::get_prev_collumn
+ * @param _sq
+ * @return Square* _sq
+ */
+Square* Board::get_prev_collumn(Square* _sq) {
+    return _sq = _sq - Board::widht;
+}
+
+
+/**
+ * @brief Board::get_neighbours_empty
+ * @param _sq
+ * @return bool empty
+ */
+bool Board::get_neighbours_empty(Square* _sq) {
+    bool empty, em1, em2, em3, em4;
+
+    /**
+     * the square below the selected one
+     */
+    em1 = (Board::get_next(_sq))->get_square_set();
+
+    std::cout << em1 << std::endl;
+    empty = !(em1);
+
+    /**
+     * the square above the selected one
+     */
+    em2 = (Board::get_prev(_sq))->get_square_set();
+
+    std::cout << em2 << std::endl;
+    empty = empty & !(em2);
+
+
+    /**
+     * the square on the right hand side
+     */
+    em3 = (Board::get_next_collumn(_sq))->get_square_set();
+
+    std::cout << em3 << std::endl;
+    empty = empty & !(em3);
+
+
+    /**
+     * and the square on the left hand side of the selected one will be tested.
+     * if everyone is not set this func. will return true.
+     */
+    em4 = (Board::get_prev_collumn(_sq))->get_square_set();
+
+    std::cout << em4 << std::endl;
+    empty = empty & !(em4);
+
+    //empty = !(em1 & em2 & em3 & em4);
+    std::cout << empty << " get_neighbours_empty" << std::endl;
+    return empty;
 }
 
 
@@ -148,30 +221,42 @@ Square* Board::get_next(Square *_sq) {
 bool Board::get_squares_empty(Square *_sq1, Square *_sq2, Square *_sq3, Square *_sq4, Square *_sq5) {
     bool empty, em3, em4, em5;
 
-    empty = (!(_sq1->get_square_set()) & !(_sq2->get_square_set()));
+    empty = ((!(_sq1->get_square_set())) & Board::get_neighbours_empty(_sq1));
+
+    std::cout << empty << " get_squares_empty 1" << std::endl;
+
+    empty = empty & ((!(_sq2->get_square_set())) & Board::get_neighbours_empty(_sq2));
+
+    std::cout << empty << " get_squares_empty 2" << std::endl;
 
     /**
      * If a third Square is needed, check if it is empty as well,
      */
     if(_sq3 != NULL) {
-        em3 = !(_sq3->get_square_set());
+        em3 = ((!(_sq3->get_square_set())) & Board::get_neighbours_empty(_sq3));
         empty = (empty & em3);
+
+        std::cout << empty << " get_squares_empty 3" << std::endl;
     }
 
     /**
      * same goes for the fourth Square
      */
     if(_sq4 != NULL) {
-        em4 = !(_sq4->get_square_set());
+        em4 = ((!(_sq4->get_square_set())) & Board::get_neighbours_empty(_sq4));
         empty = (empty & em4);
+
+        std::cout << empty << " get_squares_empty 4" << std::endl;
     }
 
     /**
      * and the fifth.
      */
     if(_sq5 != NULL) {
-        em5 = !(_sq5->get_square_set());
+        em5 = ((!(_sq5->get_square_set())) & Board::get_neighbours_empty(_sq5));
         empty = (empty & em5);
+
+        std::cout << empty << " get_squares_empty 5" << std::endl;
     }
     return empty;
 }
@@ -315,7 +400,7 @@ bool Board::hit_square(Square* _sq) {
 
 
 /*
- * Help functions for console debugging
+ * Help functions for terminal debugging
  */
 
 
