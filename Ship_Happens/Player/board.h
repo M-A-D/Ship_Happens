@@ -33,7 +33,7 @@ class Board {
 private:
     size_t lenght;          /**< the number of collumns of a board*/
     size_t widht;           /**< the number of lines of a board*/
-    Square field[10][10];   /**< two dimensional array of Squares [number of collumns][number of lines]*/
+    Square field[11][11];   /**< two dimensional array of Squares [number of collumns][number of lines]*/
 
 protected:
     Square* get_next(Square* _sq);

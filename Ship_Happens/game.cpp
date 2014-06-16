@@ -590,6 +590,7 @@ void Game::bomb_field_routine() {
  */
 bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &_ye) {
     bool legal = false;
+    size_t range = Game::player.return_board_ref().get_lenght();
 
     std::cout << "enter the first 'x' cordinate:    ";
     std::cin >> _xa;
@@ -625,7 +626,7 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
         return legal;
     }
 
-    if((_xe <= 10) & (_ye <= 10) & (_xa <= 10) & (_ya <= 10)) {
+    if((_xe <= range) & (_ye <= range) & (_xa <= range) & (_ya <= range)) {
         legal = true;
     }
 
@@ -649,6 +650,7 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
  */
 bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &_ye, size_t &_x3, size_t &_y3) {
     bool legal = false;
+    size_t range = Game::player.return_board_ref().get_lenght();
 
     std::cout << "enter the first 'x' cordinate:    ";
     std::cin >> _xa;
@@ -684,7 +686,7 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
         _x3 = (_xa + 1);
     }
 
-    if((_xe <= 10)& (_ye <= 10) & (_xa <= 10) & (_ya <= 10) & (_x3 <= 10) & (_y3 <= 10)) {
+    if((_xe <= range)& (_ye <= range) & (_xa <= range) & (_ya <= range) & (_x3 <= range) & (_y3 <= range)) {
         legal = true;
     }
 
@@ -710,6 +712,7 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
  */
 bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &_ye, size_t &_x3, size_t &_y3, size_t &_x4, size_t &_y4) {
     bool legal = false;
+    size_t range = Game::player.return_board_ref().get_lenght();
 
     std::cout << "enter the first 'x' cordinate:    ";
     std::cin >> _xa;
@@ -749,8 +752,8 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
         _x4 = (_xa + 2);
     }
 
-    if((_xe <= 10) & (_ye <= 10) & (_xa <= 10) & (_ya <= 10) & (_x3 <= 10) & (_y3 <= 10)
-      &(_x4 <= 10) & (_y4 <=10)) {
+    if((_xe <= range) & (_ye <= range) & (_xa <= range) & (_ya <= range) & (_x3 <= range) & (_y3 <= range)
+      &(_x4 <= range) & (_y4 <= range)) {
         legal = true;
     }
 
@@ -779,6 +782,7 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
  */
 bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &_ye, size_t &_x3, size_t &_y3, size_t &_x4, size_t &_y4, size_t &_x5, size_t &_y5) {
     bool legal = false;
+    size_t range = Game::player.return_board_ref().get_lenght();
 
     std::cout << "enter the first 'x' cordinate:    ";
     std::cin >> _xa;
@@ -822,8 +826,8 @@ bool Game::read_ship_coordinates(size_t &_xa, size_t &_ya, size_t &_xe, size_t &
         _x5 = (_xa + 3);
     }
 
-    if((_xe <= 10) & (_ye <= 10) & (_xa <= 10) & (_ya <= 10) & (_x3 <= 10) & (_y3 <= 10)
-      &(_x4 <= 10) & (_y4 <=10) & (_x5 <= 10) & (_y5 <= 10)) {
+    if((_xe <= range) & (_ye <= range) & (_xa <= range) & (_ya <= range) & (_x3 <= range) & (_y3 <= range)
+      & (_x4 <= range) & (_y4 <= range) & (_x5 <= range) & (_y5 <= range)) {
         legal = true;
     }
 

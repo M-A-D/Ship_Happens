@@ -70,8 +70,8 @@ Board::Board() {
  * @param Board::lenght = _y
  */
 Board::Board(size_t _x, size_t _y) {
-    Board::lenght = _x;
-    Board::widht = _y;
+    Board::lenght = _x + 1;
+    Board::widht = _y + 1;
 }
 
 
@@ -89,8 +89,8 @@ Board::~Board() {
  * (e.g. "hit", "set", "disabled")
  */
 void Board::clear_board() {
-    for(size_t line = 0; line < Board::widht; line++) {
-        for(size_t column = 0; column < Board::lenght; column++) {
+    for(size_t line = 0; line < Board::widht + 1; line++) {
+        for(size_t column = 0; column < Board::lenght + 1; column++) {
             Board::field [line][column].un_set_square();
             Board::field [line][column].un_set_hit();
 
@@ -110,8 +110,6 @@ void Board::clear_board() {
  * @param size_t _y
  */
 void Board::disable_square(size_t _x, size_t _y) {
-    _x = _x-1;
-    _y = _y-1;
     Board::field[_x][_y].set_disabled();
 }
 
@@ -120,6 +118,7 @@ void Board::disable_square(size_t _x, size_t _y) {
  * @brief Board::get_next
  * @param _sq
  * @return Square* _sq
+ * Board::get_next returns a pointer to the next square in a collumn
  */
 Square* Board::get_next(Square* _sq) {
     return ++_sq;
@@ -130,6 +129,7 @@ Square* Board::get_next(Square* _sq) {
  * @brief Board::get_prev
  * @param _sq
  * @return Square* _sq
+ * Board::get_prev returns a pointer to the previous square in a collumn
  */
 Square* Board::get_prev(Square* _sq) {
     return --_sq;
@@ -140,9 +140,10 @@ Square* Board::get_prev(Square* _sq) {
  * @brief Board::get_next_collumn
  * @param _sq
  * @return Square* _sq
+ * Board::get_next_collumn returns a pointer to the square in the next collumn
  */
 Square* Board::get_next_collumn(Square* _sq) {
-    return _sq = _sq + Board::lenght;
+    return _sq = _sq + (Board::lenght + 1);
 }
 
 
@@ -150,9 +151,10 @@ Square* Board::get_next_collumn(Square* _sq) {
  * @brief Board::get_prev_collumn
  * @param _sq
  * @return Square* _sq
+ * Board::get_prev_collumn returns a pointer to the square in the previous collumn
  */
 Square* Board::get_prev_collumn(Square* _sq) {
-    return _sq = _sq - Board::widht;
+    return _sq = _sq - (Board::lenght + 1);
 }
 
 
@@ -160,6 +162,8 @@ Square* Board::get_prev_collumn(Square* _sq) {
  * @brief Board::get_neighbours_empty
  * @param _sq
  * @return bool empty
+ * Board::get_neighbours_empty checks the fields next to _sq if they are empty
+ * or anything has been set next to them.
  */
 bool Board::get_neighbours_empty(Square* _sq) {
     bool empty, em1, em2, em3, em4;
@@ -169,7 +173,7 @@ bool Board::get_neighbours_empty(Square* _sq) {
      */
     em1 = (Board::get_next(_sq))->get_square_set();
 
-    std::cout << em1 << std::endl;
+    //std::cout << em1 << std::endl;
     empty = !(em1);
 
     /**
@@ -177,7 +181,7 @@ bool Board::get_neighbours_empty(Square* _sq) {
      */
     em2 = (Board::get_prev(_sq))->get_square_set();
 
-    std::cout << em2 << std::endl;
+    //std::cout << em2 << std::endl;
     empty = empty & !(em2);
 
 
@@ -186,7 +190,7 @@ bool Board::get_neighbours_empty(Square* _sq) {
      */
     em3 = (Board::get_next_collumn(_sq))->get_square_set();
 
-    std::cout << em3 << std::endl;
+    //std::cout << em3 << std::endl;
     empty = empty & !(em3);
 
 
@@ -196,11 +200,11 @@ bool Board::get_neighbours_empty(Square* _sq) {
      */
     em4 = (Board::get_prev_collumn(_sq))->get_square_set();
 
-    std::cout << em4 << std::endl;
+    //std::cout << em4 << std::endl;
     empty = empty & !(em4);
 
     //empty = !(em1 & em2 & em3 & em4);
-    std::cout << empty << " get_neighbours_empty" << std::endl;
+    //std::cout << empty << " get_neighbours_empty" << std::endl;
     return empty;
 }
 
@@ -223,11 +227,11 @@ bool Board::get_squares_empty(Square *_sq1, Square *_sq2, Square *_sq3, Square *
 
     empty = ((!(_sq1->get_square_set())) & Board::get_neighbours_empty(_sq1));
 
-    std::cout << empty << " get_squares_empty 1" << std::endl;
+    //std::cout << empty << " get_squares_empty 1" << std::endl;
 
     empty = empty & ((!(_sq2->get_square_set())) & Board::get_neighbours_empty(_sq2));
 
-    std::cout << empty << " get_squares_empty 2" << std::endl;
+    //std::cout << empty << " get_squares_empty 2" << std::endl;
 
     /**
      * If a third Square is needed, check if it is empty as well,
@@ -236,7 +240,7 @@ bool Board::get_squares_empty(Square *_sq1, Square *_sq2, Square *_sq3, Square *
         em3 = ((!(_sq3->get_square_set())) & Board::get_neighbours_empty(_sq3));
         empty = (empty & em3);
 
-        std::cout << empty << " get_squares_empty 3" << std::endl;
+        //std::cout << empty << " get_squares_empty 3" << std::endl;
     }
 
     /**
@@ -246,7 +250,7 @@ bool Board::get_squares_empty(Square *_sq1, Square *_sq2, Square *_sq3, Square *
         em4 = ((!(_sq4->get_square_set())) & Board::get_neighbours_empty(_sq4));
         empty = (empty & em4);
 
-        std::cout << empty << " get_squares_empty 4" << std::endl;
+        //std::cout << empty << " get_squares_empty 4" << std::endl;
     }
 
     /**
@@ -256,7 +260,7 @@ bool Board::get_squares_empty(Square *_sq1, Square *_sq2, Square *_sq3, Square *
         em5 = ((!(_sq5->get_square_set())) & Board::get_neighbours_empty(_sq5));
         empty = (empty & em5);
 
-        std::cout << empty << " get_squares_empty 5" << std::endl;
+        //std::cout << empty << " get_squares_empty 5" << std::endl;
     }
     return empty;
 }
@@ -349,7 +353,7 @@ void Board::set_ship(Square* _sq1, Square* _sq2, Square* _sq3, Square* _sq4, Squ
  * @return Square* _sq
  */
 Square* Board::get_Square_ptr(size_t _x, size_t _y) {
-    return &(Board::field[_x-1][_y-1]);
+    return &(Board::field[_x][_y]);
 }
 
 
@@ -413,14 +417,14 @@ void Board::print_own_board() {
     std::cout << "this is the your board:\n" << " A B C D E F G H I K" << std::endl;
     for(size_t line = 0; line < Board::widht; line++) {
         for(size_t column = 0; column< Board::lenght; column++) {
-            if(Board::field [column][line].get_square_set()) {
+            if(Board::field [column + 1][line + 1].get_square_set()) {
                 std::cout << "|X";
             }
 
             else
                 std:: cout << "| ";
         }
-        std::cout << "| " << line+1 << "\n";	// print line numbers
+        std::cout << "| " << line + 1 << "\n";	// print line numbers
     }
     std::cout << std::endl;
 }
@@ -436,18 +440,18 @@ void Board::print_enemy_board() {
     std::cout << "this is the enemies board:\n" << " A B C D E F G H I K" << std::endl;
     for(size_t line = 0; line < Board::widht; line++) {
         for(size_t column = 0; column< Board::lenght; column++) {
-            if((Board::field [column][line].get_square_hit()) &
-               (Board::field [column][line].get_square_set())) {
+            if((Board::field [column + 1][line + 1].get_square_hit()) &
+               (Board::field [column + 1][line + 1].get_square_set())) {
                 std::cout << "|X";
             }
 
-            else if(Board::field[column][line].get_square_hit()) {
+            else if(Board::field[column + 1][line + 1].get_square_hit()) {
                 std::cout << "|o";
             }
             else
                 std:: cout << "| ";
         }
-        std::cout << "| " << line+1 << "\n";	// print line numbers
+        std::cout << "| " << line + 1 << "\n";	// print line numbers
     }
     std::cout << std::endl;
 }
@@ -468,7 +472,7 @@ bool Board::hit_square(size_t _x, size_t _y) {
     /**
      * if the square is disabled one should not be able to hit it
      */
-    if(Board::field[_x-1][_y-1].get_square_disabled()) {
+    if(Board::field[_x][_y].get_square_disabled()) {
         std::cout << "This field is disabled!" << std::endl;
         return false;
     }
@@ -476,7 +480,7 @@ bool Board::hit_square(size_t _x, size_t _y) {
     /**
      * square already hit, exception needed
      */
-    else if(Board::field[_x-1][_y-1].get_square_hit()) {
+    else if(Board::field[_x][_y].get_square_hit()) {
         std::cout << "You already bombed this sector!" << std::endl;
         return false;
     }
@@ -485,7 +489,7 @@ bool Board::hit_square(size_t _x, size_t _y) {
      * toggle square.hit flag
      */
     else {
-        Board::field[_x-1][_y-1].set_hit();
+        Board::field[_x][_y].set_hit();
         return true;
     }
 }
@@ -503,8 +507,8 @@ bool Board::hit_square(size_t _x, size_t _y) {
  * @param size_t _y2
  */
  void Board::set_ship(size_t _x1, size_t _y1, size_t _x2, size_t _y2) {
-     Board::field[_x1-1][_y1-1].set_square();
-     Board::field[_x2-1][_y2-1].set_square();
+     Board::field[_x1][_y1].set_square();
+     Board::field[_x2][_y2].set_square();
 }
 
 
@@ -522,9 +526,9 @@ bool Board::hit_square(size_t _x, size_t _y) {
  * @param size_t _y3
  */
 void Board::set_ship(size_t _x1, size_t _y1, size_t _x2, size_t _y2, size_t _x3, size_t _y3) {
-     Board::field[_x1-1][_y1-1].set_square();
-     Board::field[_x2-1][_y2-1].set_square();
-     Board::field[_x3-1][_y3-1].set_square();
+     Board::field[_x1][_y1].set_square();
+     Board::field[_x2][_y2].set_square();
+     Board::field[_x3][_y3].set_square();
 }
 
 
@@ -543,10 +547,10 @@ void Board::set_ship(size_t _x1, size_t _y1, size_t _x2, size_t _y2, size_t _x3,
  */
 void Board::set_ship(size_t _x1, size_t _y1, size_t _x2, size_t _y2, size_t _x3, size_t _y3,
                       size_t _x4, size_t _y4) {
-     Board::field[_x1-1][_y1-1].set_square();
-     Board::field[_x2-1][_y2-1].set_square();
-     Board::field[_x3-1][_y3-1].set_square();
-     Board::field[_x4-1][_y4-1].set_square();
+     Board::field[_x1][_y1].set_square();
+     Board::field[_x2][_y2].set_square();
+     Board::field[_x3][_y3].set_square();
+     Board::field[_x4][_y4].set_square();
 }
 
 
@@ -569,9 +573,9 @@ void Board::set_ship(size_t _x1, size_t _y1, size_t _x2, size_t _y2, size_t _x3,
  */
 void Board::set_ship(size_t _x1, size_t _y1, size_t _x2, size_t _y2, size_t _x3, size_t _y3,
                        size_t _x4, size_t _y4, size_t _x5, size_t _y5) {
-     Board::field[_x1-1][_y1-1].set_square();
-     Board::field[_x2-1][_y2-1].set_square();
-     Board::field[_x3-1][_y3-1].set_square();
-     Board::field[_x4-1][_y4-1].set_square();
-     Board::field[_x5-1][_y5-1].set_square();
+     Board::field[_x1][_y1].set_square();
+     Board::field[_x2][_y2].set_square();
+     Board::field[_x3][_y3].set_square();
+     Board::field[_x4][_y4].set_square();
+     Board::field[_x5][_y5].set_square();
 }

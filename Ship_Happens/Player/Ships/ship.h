@@ -20,7 +20,13 @@
 # ifndef SHIP_TYPE
 # define SHIP_TYPE
 
+
 typedef
+/**
+ * @brief The Enum Ship_Type
+ * The enum Ship_Type holds all possible Types of Ships, and equals them to a unique
+ * integer. This prevents a user from abusing the cernel by calling not existant ships.
+ */
 enum {
 
     Ship_t = 0,
