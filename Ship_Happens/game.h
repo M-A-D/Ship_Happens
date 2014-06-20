@@ -31,6 +31,8 @@ class Game {
 private:
    Player player;   /**< this is going to be the player using the device*/
    Player enemy;    /**< this is the second player later on connected via Network*/
+   Board enemy_board; /**< in this board the information of the enemy board will be saved*/
+   char squares [];
 
 protected:
 
@@ -52,7 +54,6 @@ protected:
 
 public:
     Game();
-    //Game(Insert Network functionality here);
     ~Game();
 
     void init_game();
@@ -67,6 +68,12 @@ public:
 
     void bomb_square(size_t _x, size_t _y);
     bool place_ships(Square* _sq1, Square* _sq2, Square* sq3 = NULL, Square* _sq4 = NULL, Square* _sq5 = NULL);
+
+    /*
+     * Network
+     */
+    void receive_enemy_board_from_network(char* squares);
+    char* send_board_to_network(char* squares);
 
 # ifndef GRAPHIC
     // help functions for terminal debugging

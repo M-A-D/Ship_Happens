@@ -172,6 +172,33 @@ bool Game::place_ships(Square* _sq1, Square* _sq2, Square* _sq3, Square* _sq4, S
  */
 void Game::bomb_square(size_t _x, size_t _y) {
     Game::player.bomb_enemy_field(Game::enemy.return_board_ref(), _x, _y);
+    // Game::enemy_board.hit_square(enemy_board.get_Square_ptr(_x, _y));
+    /*
+     * Send it to the enemy Board from here
+     */
+}
+
+
+/*
+ * Network
+ */
+
+/**
+ * @brief Game::receive_enemy_board_from_network
+ * @param squares
+ */
+void Game::receive_enemy_board_from_network(char *squares) {
+    Game::enemy_board.receive_set_squares(squares);
+}
+
+
+/**
+ * @brief Game::send_board_to_network
+ * @param squares
+ * @return
+ */
+char* Game::send_board_to_network(char *squares) {
+    Game::player.return_board_ref().send_set_squares(squares);
 }
 
 

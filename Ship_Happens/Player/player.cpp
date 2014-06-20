@@ -296,7 +296,9 @@ bool Player::bomb_enemy_field(Board& _en_field, size_t _x, size_t _y) {
  * @brief Player::change_activ_status
  * @see Player::check_ships
  * @see Player::check_lose
+ * OBSOLETE!!!
  *
+ * If a player is active he will be set not_active and the other way round
  */
 void Player::change_activ_status() {
     Player::check_ships();
@@ -307,6 +309,7 @@ void Player::change_activ_status() {
 
 /**
  * @brief Player::set_active
+ * change a players active flag to true
  */
 void Player::set_active() {
     Player::check_ships();
@@ -317,6 +320,7 @@ void Player::set_active() {
 
 /**
  * @brief Player::set_not_active
+ * change a players active flag to false
  */
 void Player::set_not_active() {
     Player::active = false;
@@ -326,6 +330,7 @@ void Player::set_not_active() {
 /**
  * @brief Player::get_active
  * @return Player::active
+ * simple getter, returns the players active flag
  */
 bool Player::get_active() {
     return Player::active;
